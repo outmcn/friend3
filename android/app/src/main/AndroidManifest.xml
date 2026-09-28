@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fazil.chatappui">
+    package="com.outmcn.friend3">
    <application
-        android:label="socialne"
+        android:label="Friend3"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
