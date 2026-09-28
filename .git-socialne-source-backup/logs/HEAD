@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 3e22ce94bd10800cef47a97353a82d470de68402 outmcn <outmcn@users.noreply.github.com> 1790614075 +0800	clone: from https://github.com/gitcarlx/Socialne.git
+3e22ce94bd10800cef47a97353a82d470de68402 0227aa5c824d5c922af3842f8c493350f9b7d934 outmcn <outmcn@users.noreply.github.com> 1790615114 +0800	commit: feat: add Socialne demo UI Friend3
+0227aa5c824d5c922af3842f8c493350f9b7d934 0000000000000000000000000000000000000000 outmcn <outmcn@users.noreply.github.com> 1790615114 +0800	Branch: renamed refs/heads/main to refs/heads/main
+0227aa5c824d5c922af3842f8c493350f9b7d934 0227aa5c824d5c922af3842f8c493350f9b7d934 outmcn <outmcn@users.noreply.github.com> 1790615114 +0800	Branch: renamed refs/heads/main to refs/heads/main
+0227aa5c824d5c922af3842f8c493350f9b7d934 8e9d54ae4a705f7e222bfd647ad9a538c7dc14fc outmcn <outmcn@users.noreply.github.com> 1790615136 +0800	commit: fix: upload Friend3 IPA artifact
