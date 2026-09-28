@@ -349,14 +349,24 @@ class DiscoverPage extends StatelessWidget {
             decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search), hintText: '搜索话题、活动和用户')),
         const SizedBox(height: 18),
-        const _DiscoverTile(
+        _DiscoverTile(
             icon: Icons.local_fire_department,
             title: '热门话题',
-            subtitle: '看看大家正在讨论什么'),
-        const _DiscoverTile(
-            icon: Icons.event_available, title: '活动中心', subtitle: '参加线上线下有趣活动'),
-        const _DiscoverTile(
-            icon: Icons.trending_up, title: '趋势榜单', subtitle: '本周最受关注的内容'),
+            subtitle: '看看大家正在讨论什么',
+            onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const TopicPage()))),
+        _DiscoverTile(
+            icon: Icons.event_available,
+            title: '活动中心',
+            subtitle: '参加线上线下有趣活动',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const EventsPage()))),
+        _DiscoverTile(
+            icon: Icons.trending_up,
+            title: '趋势榜单',
+            subtitle: '本周最受关注的内容',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const TrendsPage()))),
         const SizedBox(height: 18),
         const Text('热门话题',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
@@ -452,7 +462,9 @@ class Friend3ProfilePage extends StatelessWidget {
               const Text('我的', style: TextStyle(fontWeight: FontWeight.w800)),
           actions: [
             IconButton(
-                onPressed: () {}, icon: const Icon(Icons.settings_outlined))
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SettingsPage())),
+                icon: const Icon(Icons.settings_outlined))
           ]),
       body: ListView(padding: const EdgeInsets.all(18), children: [
         const Row(children: [
@@ -476,12 +488,26 @@ class Friend3ProfilePage extends StatelessWidget {
           _Stat(value: '0', label: '粉丝')
         ]),
         const SizedBox(height: 24),
-        _ProfileAction(icon: Icons.edit_outlined, title: '编辑资料', onTap: () {}),
         _ProfileAction(
-            icon: Icons.article_outlined, title: '我的帖子', onTap: () {}),
+            icon: Icons.edit_outlined,
+            title: '编辑资料',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const EditProfilePage()))),
         _ProfileAction(
-            icon: Icons.manage_accounts_outlined, title: '账户设置', onTap: () {}),
-        _ProfileAction(icon: Icons.swap_horiz, title: '切换账户', onTap: () {}),
+            icon: Icons.article_outlined,
+            title: '我的帖子',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const MyPostsPage()))),
+        _ProfileAction(
+            icon: Icons.manage_accounts_outlined,
+            title: '账户设置',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const SettingsPage()))),
+        _ProfileAction(
+            icon: Icons.swap_horiz,
+            title: '切换账户',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const AccountSwitchPage()))),
       ]),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () => Navigator.push(context,
@@ -490,6 +516,146 @@ class Friend3ProfilePage extends StatelessWidget {
           label: const Text('发帖')),
     );
   }
+}
+
+class TopicPage extends StatelessWidget {
+  const TopicPage({super.key});
+  @override
+  Widget build(BuildContext context) => _SimpleListPage(
+        title: '热门话题',
+        items: const ['周末去哪儿', '电影分享', '城市漫步', '新朋友', '美食探店'],
+      );
+}
+
+class EventsPage extends StatelessWidget {
+  const EventsPage({super.key});
+  @override
+  Widget build(BuildContext context) => _SimpleListPage(
+        title: '活动中心',
+        items: const ['周末线下见面会', '城市摄影活动', '兴趣交友派对', '创作者交流会'],
+      );
+}
+
+class TrendsPage extends StatelessWidget {
+  const TrendsPage({super.key});
+  @override
+  Widget build(BuildContext context) => _SimpleListPage(
+        title: '趋势榜单',
+        items: const ['本周热门动态', '最受欢迎用户', '热门兴趣圈', '城市热度排行'],
+      );
+}
+
+class MyPostsPage extends StatelessWidget {
+  const MyPostsPage({super.key});
+  @override
+  Widget build(BuildContext context) => _SimpleListPage(
+        title: '我的帖子',
+        items: const ['暂无帖子', '创建你的第一条动态'],
+      );
+}
+
+class EditProfilePage extends StatelessWidget {
+  const EditProfilePage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+            title: const Text('编辑资料'),
+            actions: [TextButton(onPressed: () {}, child: const Text('保存'))]),
+        body: ListView(padding: const EdgeInsets.all(18), children: const [
+          Center(
+              child: CircleAvatar(
+                  radius: 44,
+                  child: Icon(Icons.add_a_photo_outlined, size: 30))),
+          SizedBox(height: 22),
+          TextField(decoration: InputDecoration(labelText: '昵称')),
+          SizedBox(height: 14),
+          TextField(decoration: InputDecoration(labelText: '个人简介')),
+          SizedBox(height: 14),
+          TextField(decoration: InputDecoration(labelText: '城市')),
+          SizedBox(height: 14),
+          TextField(decoration: InputDecoration(labelText: '兴趣标签')),
+        ]),
+      );
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('账户设置')),
+        body: ListView(padding: const EdgeInsets.all(18), children: [
+          const _SettingsGroup(
+              title: '账号与安全', items: ['账号信息', '修改密码', '绑定邮箱和手机号']),
+          const _SettingsGroup(title: '隐私与通知', items: ['隐私设置', '通知设置', '黑名单']),
+          const _SettingsGroup(
+              title: '其他', items: ['清理缓存', '关于 Friend3', '退出登录']),
+        ]),
+      );
+}
+
+class AccountSwitchPage extends StatelessWidget {
+  const AccountSwitchPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('切换账户')),
+        body: ListView(padding: const EdgeInsets.all(18), children: [
+          const ListTile(
+              leading: CircleAvatar(child: Icon(Icons.person)),
+              title: Text('Friend 用户'),
+              trailing: Icon(Icons.check_circle)),
+          ListTile(
+              leading: const CircleAvatar(child: Icon(Icons.add)),
+              title: const Text('添加其他账户'),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const LoginPage()))),
+        ]),
+      );
+}
+
+class _SettingsGroup extends StatelessWidget {
+  const _SettingsGroup({required this.title, required this.items});
+  final String title;
+  final List<String> items;
+  @override
+  Widget build(BuildContext context) =>
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+            padding: const EdgeInsets.only(top: 14, bottom: 8),
+            child: Text(title,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w700))),
+        Card(
+          child: Column(
+            children: items
+                .map((item) => ListTile(
+                      title: Text(item),
+                      trailing: const Icon(Icons.chevron_right),
+                    ))
+                .toList(),
+          ),
+        ),
+      ]);
+}
+
+class _SimpleListPage extends StatelessWidget {
+  const _SimpleListPage({required this.title, required this.items});
+  final String title;
+  final List<String> items;
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: ListView.separated(
+            padding: const EdgeInsets.all(18),
+            itemCount: items.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemBuilder: (_, index) => Card(
+                child: ListTile(
+                    leading: CircleAvatar(child: Text('${index + 1}')),
+                    title: Text(items[index]),
+                    subtitle: const Text('静态演示内容'),
+                    trailing: const Icon(Icons.chevron_right)))),
+      );
 }
 
 class _SectionTitle extends StatelessWidget {
@@ -565,18 +731,26 @@ class _RecommendationRow extends StatelessWidget {
 }
 
 class _DiscoverTile extends StatelessWidget {
-  const _DiscoverTile(
-      {required this.icon, required this.title, required this.subtitle});
+  const _DiscoverTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
   final IconData icon;
   final String title;
   final String subtitle;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => Card(
-      child: ListTile(
+        child: ListTile(
+          onTap: onTap,
           leading: CircleAvatar(child: Icon(icon)),
           title: Text(title),
           subtitle: Text(subtitle),
-          trailing: const Icon(Icons.chevron_right)));
+          trailing: const Icon(Icons.chevron_right),
+        ),
+      );
 }
 
 class _NotificationRow extends StatelessWidget {
