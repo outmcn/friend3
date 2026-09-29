@@ -23,9 +23,22 @@ class Friend3App extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: const Color(0xff242329),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          hintStyle: TextStyle(color: Colors.white.withValues(alpha: .56)),
+          prefixIconColor: Colors.white.withValues(alpha: .72),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(
+                color: const Color(0xffa77bff).withValues(alpha: .72)),
           ),
         ),
       ),
@@ -540,9 +553,17 @@ class _PrimaryAuthButton extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: FilledButton(onPressed: onTap, child: Text(label)));
+        width: double.infinity,
+        height: 52,
+        child: FilledButton(
+          onPressed: onTap,
+          style: FilledButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          ),
+          child: Text(label),
+        ),
+      );
 }
 
 class _SocialLogin extends StatelessWidget {
@@ -875,13 +896,19 @@ class _DiscoverTile extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => Card(
-        child: ListTile(
+        margin: const EdgeInsets.only(bottom: 10),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
           onTap: onTap,
-          leading: _iconFor(icon),
-          title:
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-          subtitle: Text(subtitle),
-          trailing: const Icon(Icons.chevron_right),
+          child: ListTile(
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+            leading: _iconFor(icon),
+            title: Text(title,
+                style: const TextStyle(fontWeight: FontWeight.w700)),
+            subtitle: Text(subtitle),
+            trailing: const Icon(Icons.chevron_right),
+          ),
         ),
       );
 }
@@ -1617,14 +1644,21 @@ class _ContentPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: ListTile(
+      margin: const EdgeInsets.only(bottom: 10),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
         onTap: onTap,
-        leading: imageAsset == null
-            ? _iconFor(icon)
-            : CircleAvatar(backgroundImage: AssetImage(imageAsset!)),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right),
+        child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+          leading: imageAsset == null
+              ? _iconFor(icon)
+              : CircleAvatar(backgroundImage: AssetImage(imageAsset!)),
+          title:
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+          subtitle: Text(subtitle),
+          trailing: const Icon(Icons.chevron_right),
+        ),
       ),
     );
   }

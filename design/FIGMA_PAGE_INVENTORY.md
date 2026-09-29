@@ -94,3 +94,6 @@ Figma 文件头：`fig-kiwi`，版本 `95`。
 
 
 底部 Tab 修正：按用户要求改回 Flutter 官方 `NavigationBar` 图标，使用 `Icons.home/explore/notifications/person` 及对应 outline 版本；页面切换逻辑保持不变，腾讯图标仅用于页面内其他匹配图标。
+
+
+统一组件批次：统一输入框为深色圆角胶囊样式，统一认证主按钮圆角和高度，统一发现/推荐内容卡片的圆角、内边距、点击反馈和列表间距；补充统一空状态卡片基础样式。
