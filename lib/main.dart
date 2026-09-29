@@ -1236,12 +1236,30 @@ class ContentDetailPage extends StatelessWidget {
         context: context,
         showDragHandle: true,
         builder: (_) => SafeArea(
-          child: Wrap(children: [
-            ListTile(leading: _FigmaIcon('link'), title: const Text('复制链接')),
-            const ListTile(
-                leading: _FigmaIcon('message'), title: Text('分享给好友')),
-            const ListTile(leading: _FigmaIcon('more'), title: Text('更多分享方式')),
-          ]),
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: _tdIcon('link'),
+                title: const Text('复制链接'),
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('链接已复制')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: _tdIcon('message'),
+                title: const Text('分享给好友'),
+                onTap: () => Navigator.pop(context),
+              ),
+              ListTile(
+                leading: _tdIcon('more'),
+                title: const Text('更多分享方式'),
+                onTap: () => Navigator.pop(context),
+              ),
+            ],
+          ),
         ),
       );
 }
@@ -1288,14 +1306,20 @@ class _CommentPreview extends StatelessWidget {
       );
 }
 
-class OtherProfilePage extends StatelessWidget {
+class OtherProfilePage extends StatefulWidget {
   const OtherProfilePage(
       {super.key,
       this.name = '推荐用户',
       this.avatarAsset = 'assets/figma/profile-portrait-2.jpg'});
   final String name;
   final String avatarAsset;
+  @override
+  State<OtherProfilePage> createState() => _OtherProfilePageState();
+}
 
+class _OtherProfilePageState extends State<OtherProfilePage> {
+  bool followed = false;
+  bool privateChatOpened = false;
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -1314,13 +1338,14 @@ class OtherProfilePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                    radius: 42, backgroundImage: AssetImage(avatarAsset)),
+                    radius: 42,
+                    backgroundImage: AssetImage(widget.avatarAsset)),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name,
+                      Text(widget.name,
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w800)),
                       const SizedBox(height: 6),
@@ -1330,11 +1355,16 @@ class OtherProfilePage extends StatelessWidget {
                         children: [
                           Expanded(
                               child: FilledButton(
-                                  onPressed: () {}, child: const Text('关注'))),
+                                  onPressed: () =>
+                                      setState(() => followed = !followed),
+                                  child: Text(followed ? '已关注' : '关注'))),
                           const SizedBox(width: 8),
                           Expanded(
                               child: OutlinedButton(
-                                  onPressed: () {}, child: const Text('私聊'))),
+                                  onPressed: () =>
+                                      setState(() => privateChatOpened = true),
+                                  child:
+                                      Text(privateChatOpened ? '私聊中' : '私聊'))),
                         ],
                       ),
                     ],
