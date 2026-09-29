@@ -218,6 +218,52 @@ class ResetPasswordPage extends StatelessWidget {
       );
 }
 
+class FilledLoginPage extends StatelessWidget {
+  const FilledLoginPage({super.key});
+  @override
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '登录',
+        subtitle: '已填写账号，继续完成登录',
+        child: Column(children: [
+          const _AuthField(
+              label: '邮箱或手机号',
+              icon: Icons.person,
+              initialText: 'friend@example.com'),
+          const SizedBox(height: 14),
+          const _AuthField(
+              label: '密码',
+              icon: Icons.lock_outline,
+              obscureText: true,
+              initialText: '••••••••'),
+          const SizedBox(height: 24),
+          _PrimaryAuthButton(
+              label: '登录',
+              onTap: () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+        ]),
+      );
+}
+
+class VerificationPage extends StatelessWidget {
+  const VerificationPage({super.key, required this.title});
+  final String title;
+  @override
+  Widget build(BuildContext context) => AuthScaffold(
+        title: title,
+        subtitle: '验证码已发送，请输入验证码',
+        child: Column(children: [
+          const _AuthField(label: '验证码', icon: Icons.verified_outlined),
+          const SizedBox(height: 10),
+          Align(
+              alignment: Alignment.centerRight,
+              child:
+                  TextButton(onPressed: () {}, child: const Text('重新获取验证码'))),
+          const SizedBox(height: 18),
+          _PrimaryAuthButton(label: '确认', onTap: () => Navigator.pop(context)),
+        ]),
+      );
+}
+
 class PhoneLoginPage extends StatelessWidget {
   const PhoneLoginPage({super.key});
   @override
@@ -388,13 +434,19 @@ class AuthScaffold extends StatelessWidget {
 
 class _AuthField extends StatelessWidget {
   const _AuthField(
-      {required this.label, required this.icon, this.obscureText = false});
+      {required this.label,
+      required this.icon,
+      this.obscureText = false,
+      this.initialText});
   final String label;
   final IconData icon;
   final bool obscureText;
+  final String? initialText;
   @override
   Widget build(BuildContext context) => TextField(
       obscureText: obscureText,
+      controller:
+          initialText == null ? null : TextEditingController(text: initialText),
       decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)));
 }
 
@@ -1317,11 +1369,12 @@ class _NotificationRow extends StatelessWidget {
   final String subtitle;
   @override
   Widget build(BuildContext context) => ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: CircleAvatar(child: Icon(icon)),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right));
+        contentPadding: EdgeInsets.zero,
+        leading: CircleAvatar(child: Icon(icon)),
+        title: Text(title),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.chevron_right),
+      );
 }
 
 class _MediaAction extends StatelessWidget {
