@@ -53,14 +53,14 @@ class OnboardingPage extends StatelessWidget {
                       color: Colors.white.withValues(alpha: .68),
                       fontSize: 18)),
               const SizedBox(height: 34),
-              Container(
-                height: 220,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(34),
-                    gradient: const LinearGradient(
-                        colors: [Color(0xff6f4de6), Color(0xffef7db7)])),
-                child: const Center(
-                    child: Icon(Icons.people_alt_rounded, size: 100)),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(34),
+                child: Image.asset(
+                  'assets/figma/hero-laptop.png',
+                  height: 220,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
               const Spacer(),
               SizedBox(
@@ -1307,7 +1307,7 @@ class _FeaturePostCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         image: const DecorationImage(
-          image: AssetImage('assets/story.jpg'),
+          image: AssetImage('assets/figma/hero-laptop-alt.jpg'),
           fit: BoxFit.cover,
         ),
       ),
