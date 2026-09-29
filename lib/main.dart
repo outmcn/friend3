@@ -885,8 +885,12 @@ class ContentDetailPage extends StatelessWidget {
               height: 260,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                gradient: const LinearGradient(
-                    colors: [Color(0xff5d3fd3), Color(0xffdc679c)]),
+                image: DecorationImage(
+                  image: AssetImage(video
+                      ? 'assets/figma/post-thumbnail-1.jpg'
+                      : 'assets/figma/post-thumbnail-2.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
               child: Center(
                   child: Icon(
@@ -897,7 +901,10 @@ class ContentDetailPage extends StatelessWidget {
             const SizedBox(height: 18),
             const ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(child: Icon(Icons.person)),
+              leading: CircleAvatar(
+                backgroundImage:
+                    AssetImage('assets/figma/profile-portrait-2.jpg'),
+              ),
               title:
                   Text('推荐用户', style: TextStyle(fontWeight: FontWeight.w700)),
               subtitle: Text('刚刚发布'),
@@ -977,7 +984,10 @@ class Friend3ProfilePage extends StatelessWidget {
           ]),
       body: ListView(padding: const EdgeInsets.all(18), children: [
         const Row(children: [
-          CircleAvatar(radius: 38, child: Icon(Icons.person, size: 42)),
+          CircleAvatar(
+            radius: 38,
+            backgroundImage: AssetImage('assets/figma/profile-portrait-3.jpg'),
+          ),
           SizedBox(width: 14),
           Expanded(
               child: Column(
@@ -1372,7 +1382,7 @@ class _FeaturePostCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             image: const DecorationImage(
-              image: AssetImage('assets/figma/hero-laptop-alt.jpg'),
+              image: AssetImage('assets/figma/post-thumbnail-3.jpg'),
               fit: BoxFit.cover,
             ),
           ),
