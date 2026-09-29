@@ -34,15 +34,41 @@ class Friend3App extends StatelessWidget {
 }
 
 class _FigmaIcon extends StatelessWidget {
-  const _FigmaIcon(this.name);
+  const _FigmaIcon(this.name, {this.size = 22});
   final String name;
+  final double size;
   @override
   Widget build(BuildContext context) => SvgPicture.asset(
         'assets/icons/$name.svg',
-        width: 22,
-        height: 22,
+        width: size,
+        height: size,
         color: Theme.of(context).colorScheme.onSurface,
       );
+}
+
+Widget _iconFor(IconData icon, {double size = 22}) {
+  final map = <IconData, String>{
+    Icons.home_outlined: 'home',
+    Icons.home: 'home-filled',
+    Icons.person_outline: 'account',
+    Icons.person: 'account-filled',
+    Icons.search: 'search',
+    Icons.notifications_none: 'notification',
+    Icons.notifications: 'notification',
+    Icons.bookmark_border: 'bookmark',
+    Icons.favorite_border: 'heart',
+    Icons.favorite: 'red-heart',
+    Icons.chat_bubble_outline: 'comment',
+    Icons.share_outlined: 'share',
+    Icons.link: 'link',
+    Icons.more_horiz: 'more',
+    Icons.send: 'send',
+    Icons.arrow_back: 'back',
+    Icons.keyboard_arrow_down: 'down-arrow',
+  };
+  final name = map[icon];
+  if (name == null) return Icon(icon, size: size);
+  return _FigmaIcon(name, size: size);
 }
 
 class OnboardingPage extends StatelessWidget {
@@ -510,26 +536,27 @@ class _Friend3ShellState extends State<Friend3Shell> {
     return Scaffold(
       body: pages[index],
       bottomNavigationBar: NavigationBar(
-          selectedIndex: index,
-          onDestinationSelected: (value) => setState(() => index = value),
-          destinations: const [
-            NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
-                label: '首页'),
-            NavigationDestination(
-                icon: Icon(Icons.explore_outlined),
-                selectedIcon: Icon(Icons.explore),
-                label: '发现'),
-            NavigationDestination(
-                icon: Icon(Icons.notifications_none),
-                selectedIcon: Icon(Icons.notifications),
-                label: '通知'),
-            NavigationDestination(
-                icon: Icon(Icons.person_outline),
-                selectedIcon: Icon(Icons.person),
-                label: '我的'),
-          ]),
+        selectedIndex: index,
+        onDestinationSelected: (value) => setState(() => index = value),
+        destinations: const [
+          NavigationDestination(
+              icon: _FigmaIcon('home'),
+              selectedIcon: _FigmaIcon('home-filled'),
+              label: '首页'),
+          NavigationDestination(
+              icon: _FigmaIcon('video'),
+              selectedIcon: _FigmaIcon('video-filled'),
+              label: '发现'),
+          NavigationDestination(
+              icon: _FigmaIcon('notification'),
+              selectedIcon: _FigmaIcon('notification'),
+              label: '通知'),
+          NavigationDestination(
+              icon: _FigmaIcon('account'),
+              selectedIcon: _FigmaIcon('account-filled'),
+              label: '我的'),
+        ],
+      ),
     );
   }
 }
@@ -647,7 +674,7 @@ class _QuickAction extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        leading: Icon(icon),
+        leading: _iconFor(icon),
         title: Text(label, style: const TextStyle(fontSize: 13)),
         trailing: const Icon(Icons.chevron_right, size: 18),
       ),
@@ -1498,7 +1525,7 @@ class _ProfileAction extends StatelessWidget {
   Widget build(BuildContext context) => Card(
       child: ListTile(
           onTap: onTap,
-          leading: Icon(icon),
+          leading: _iconFor(icon),
           title: Text(title),
           trailing: const Icon(Icons.chevron_right)));
 }
