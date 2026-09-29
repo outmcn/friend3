@@ -1013,6 +1013,47 @@ class _EmptyStateCard extends StatelessWidget {
       );
 }
 
+class _StatePreviewCard extends StatelessWidget {
+  const _StatePreviewCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              CircleAvatar(child: _iconFor(icon)),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
 class ContentDetailPage extends StatelessWidget {
   const ContentDetailPage({
     super.key,
@@ -1116,6 +1157,12 @@ class ContentDetailPage extends StatelessWidget {
                               icon: 'bookmark', label: '收藏', onTap: () {}),
                         ]),
                     const SizedBox(height: 24),
+                    const _StatePreviewCard(
+                      title: '暂无更多评论',
+                      subtitle: '成为第一个评论的人',
+                      icon: Icons.chat_bubble_outline,
+                    ),
+                    const SizedBox(height: 16),
                     const Text('评论',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w800)),
