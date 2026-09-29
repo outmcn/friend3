@@ -193,77 +193,63 @@ class OnboardingPage extends StatelessWidget {
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
   @override
   Widget build(BuildContext context) => AuthScaffold(
         title: '登录',
-        subtitle: '使用邮箱或手机号登录',
-        child: Column(
-          children: [
-            const _AuthField(label: '邮箱或手机号', icon: Icons.person_outline),
-            const SizedBox(height: 14),
-            const _AuthField(
-                label: '密码', icon: Icons.lock_outline, obscureText: true),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
+        subtitle: '使用手机号登录 Friend3',
+        child: Column(children: [
+          const _AuthField(label: '手机号码', icon: Icons.phone_outlined),
+          const SizedBox(height: 14),
+          const _AuthField(label: '验证码', icon: Icons.verified_outlined),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            TextButton(
                 onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PhoneLoginPage()),
-                ),
-                child: const Text('使用手机号登录'),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const PasswordLoginPage())),
+                child: const Text('密码登录')),
+            TextButton(
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) => const ResetPasswordPage())),
-                child: const Text('验证码找回密码'),
-              ),
-            ),
-            const SizedBox(height: 10),
-            _PrimaryAuthButton(
-                label: '登录',
-                onTap: () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (_) => const Friend3Shell()))),
-            const SizedBox(height: 18),
-            OutlinedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const FilledLoginPage()),
-              ),
-              icon: const Icon(Icons.check_circle_outline),
-              label: const Text('查看已填写登录状态'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const VerificationPage(title: '邮箱登录验证码'),
-                ),
-              ),
-              child: const Text('邮箱验证码登录'),
-            ),
-            const SizedBox(height: 20),
-            const Text('或使用以下方式登录'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                _SocialLogin(icon: Icons.mail_outline, label: '邮箱'),
-                _SocialLogin(icon: Icons.chat_bubble_outline, label: '微信'),
-                _SocialLogin(icon: Icons.people_outline, label: 'QQ'),
-              ],
-            ),
-            const SizedBox(height: 18),
-            TextButton(
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const RegisterPage())),
-                child: const Text('还没有账号？立即注册')),
-          ],
-        ),
+                child: const Text('找回密码')),
+          ]),
+          _PrimaryAuthButton(
+              label: '登录',
+              onTap: () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+        ]),
+      );
+}
+
+class PasswordLoginPage extends StatelessWidget {
+  const PasswordLoginPage({super.key});
+  @override
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '密码登录',
+        subtitle: '使用手机号和密码登录 Friend3',
+        child: Column(children: [
+          const _AuthField(label: '手机号码', icon: Icons.phone_outlined),
+          const SizedBox(height: 14),
+          const _AuthField(
+              label: '密码', icon: Icons.lock_outline, obscureText: true),
+          Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const ResetPasswordPage())),
+                  child: const Text('找回密码'))),
+          _PrimaryAuthButton(
+              label: '登录',
+              onTap: () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('返回验证码登录')),
+        ]),
       );
 }
 
@@ -295,7 +281,8 @@ class RegisterPage extends StatelessWidget {
                   OutlinedButton(
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const PhoneLoginPage()),
+                      MaterialPageRoute(
+                          builder: (_) => const PhoneRegisterPage()),
                     ),
                     child: const Text('手机注册'),
                   ),
@@ -388,34 +375,23 @@ class VerificationPage extends StatelessWidget {
       );
 }
 
-class PhoneLoginPage extends StatelessWidget {
-  const PhoneLoginPage({super.key});
+class PhoneRegisterPage extends StatelessWidget {
+  const PhoneRegisterPage({super.key});
   @override
   Widget build(BuildContext context) => AuthScaffold(
-        title: '手机号登录',
-        subtitle: '使用手机号和验证码登录',
+        title: '手机注册',
+        subtitle: '使用手机号创建 Friend3 账号',
         child: Column(children: [
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.language),
-            title: const Text('国家/地区'),
-            subtitle: const Text('+86 中国大陆'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => showModalBottomSheet<void>(
-              context: context,
-              showDragHandle: true,
-              builder: (_) => const _CountryPickerSheet(),
-            ),
-          ),
-          const SizedBox(height: 14),
           const _AuthField(label: '手机号码', icon: Icons.phone_outlined),
           const SizedBox(height: 14),
           const _AuthField(label: '验证码', icon: Icons.verified_outlined),
           const SizedBox(height: 24),
           _PrimaryAuthButton(
-              label: '登录',
-              onTap: () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+              label: '下一步',
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const PasswordSetupPage()))),
         ]),
       );
 }
@@ -439,35 +415,6 @@ class EmailRegisterPage extends StatelessWidget {
                       builder: (_) => const PasswordSetupPage()))),
         ]),
       );
-}
-
-class _CountryPickerSheet extends StatelessWidget {
-  const _CountryPickerSheet();
-
-  @override
-  Widget build(BuildContext context) {
-    const countries = ['中国大陆 +86', '中国香港 +852', '中国澳门 +853', '中国台湾 +886'];
-    return SafeArea(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(20, 8, 20, 12),
-            child: Text('选择国家/地区',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-          ),
-          ...countries.map(
-            (country) => ListTile(
-              title: Text(country),
-              trailing:
-                  country.startsWith('中国大陆') ? const Icon(Icons.check) : null,
-              onTap: () => Navigator.pop(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class PasswordSetupPage extends StatelessWidget {
@@ -597,18 +544,6 @@ class _PrimaryAuthButton extends StatelessWidget {
           child: Text(label),
         ),
       );
-}
-
-class _SocialLogin extends StatelessWidget {
-  const _SocialLogin({required this.icon, required this.label});
-  final IconData icon;
-  final String label;
-  @override
-  Widget build(BuildContext context) => Column(children: [
-        CircleAvatar(radius: 23, child: Icon(icon)),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 12))
-      ]);
 }
 
 class Friend3Shell extends StatefulWidget {
