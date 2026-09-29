@@ -539,8 +539,26 @@ class Friend3HomePage extends StatelessWidget {
                     separatorBuilder: (_, __) => const SizedBox(width: 12),
                     itemBuilder: (_, index) => _CreatorChip(index: index))),
             const SizedBox(height: 10),
-            const _SectionTitle(title: '首页推荐', action: '更多'),
-            const _FeaturePostCard(),
+            _SectionTitle(
+              title: '首页推荐',
+              action: '更多',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const RecommendationFeedPage()),
+              ),
+            ),
+            _FeaturePostCard(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ContentDetailPage(
+                    title: '首页推荐',
+                    video: false,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
             const _SectionTitle(title: '为你推荐', action: '刷新'),
             const _RecommendationRow(),
@@ -1239,10 +1257,40 @@ class _SimpleListPage extends StatelessWidget {
       );
 }
 
+class RecommendationFeedPage extends StatelessWidget {
+  const RecommendationFeedPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('为你推荐')),
+        body: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            const _ContentPreviewCard(
+                title: '推荐内容 01', subtitle: '静态推荐内容', icon: Icons.auto_awesome),
+            const _ContentPreviewCard(
+                title: '推荐内容 02',
+                subtitle: '更多生活方式分享',
+                icon: Icons.photo_outlined),
+            _ContentPreviewCard(
+              title: '完整视频帖子',
+              subtitle: '点击查看详情',
+              icon: Icons.play_circle_outline,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const ContentDetailPage(
+                          title: '完整视频帖子', video: true))),
+            ),
+          ],
+        ),
+      );
+}
+
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title, required this.action});
+  const _SectionTitle({required this.title, required this.action, this.onTap});
   final String title;
   final String action;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(top: 14, bottom: 10),
@@ -1250,8 +1298,11 @@ class _SectionTitle extends StatelessWidget {
         Text(title,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
         const Spacer(),
-        Text(action,
-            style: TextStyle(color: Theme.of(context).colorScheme.primary))
+        GestureDetector(
+          onTap: onTap,
+          child: Text(action,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+        )
       ]));
 }
 
@@ -1299,32 +1350,35 @@ class _CreatorChip extends StatelessWidget {
 }
 
 class _FeaturePostCard extends StatelessWidget {
-  const _FeaturePostCard();
+  const _FeaturePostCard({this.onTap});
+  final VoidCallback? onTap;
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 190,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        image: const DecorationImage(
-          image: AssetImage('assets/figma/hero-laptop-alt.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Align(
-        alignment: Alignment.bottomLeft,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
         child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          color: Colors.black54,
-          child: const Text(
-            '今天也要发现一点小惊喜',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+          height: 190,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            image: const DecorationImage(
+              image: AssetImage('assets/figma/hero-laptop-alt.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              color: Colors.black54,
+              child: const Text(
+                '今天也要发现一点小惊喜',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _RecommendationRow extends StatelessWidget {
