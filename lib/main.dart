@@ -500,6 +500,8 @@ class Friend3HomePage extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const CreatePostPage()),
               ),
             ),
+            const SizedBox(height: 18),
+            const _ScrollStateCard(),
           ]),
     );
   }
@@ -562,6 +564,43 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
+class _ScrollStateCard extends StatelessWidget {
+  const _ScrollStateCard();
+
+  @override
+  Widget build(BuildContext context) => const _ContentPreviewCard(
+        title: '继续浏览',
+        subtitle: '向下滑动查看更多推荐内容',
+        icon: Icons.keyboard_arrow_down,
+      );
+}
+
+class _TrendPreviewCard extends StatelessWidget {
+  const _TrendPreviewCard({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => _ContentPreviewCard(
+        title: '流行趋势',
+        subtitle: '本周正在流行的话题和内容',
+        icon: Icons.trending_up,
+        onTap: onTap,
+      );
+}
+
+class _RecommendationPreviewCard extends StatelessWidget {
+  const _RecommendationPreviewCard({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => _ContentPreviewCard(
+        title: '为你推荐视频',
+        subtitle: '点击查看完整内容',
+        icon: Icons.play_circle_outline,
+        onTap: onTap,
+      );
+}
+
 class DiscoverPage extends StatelessWidget {
   const DiscoverPage({super.key});
 
@@ -620,6 +659,25 @@ class DiscoverPage extends StatelessWidget {
                       ),
                     ),
                   )),
+          const SizedBox(height: 12),
+          _TrendPreviewCard(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const TrendsPage()),
+            ),
+          ),
+          const SizedBox(height: 12),
+          _RecommendationPreviewCard(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ContentDetailPage(
+                  title: '推荐视频',
+                  video: true,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -693,7 +751,35 @@ class NotificationsPage extends StatelessWidget {
                 icon: Icons.campaign_outlined,
                 title: '系统通知',
                 subtitle: '暂无系统通知'),
+            SizedBox(height: 18),
+            _EmptyStateCard(
+                icon: Icons.notifications_none,
+                title: '暂无更多通知',
+                subtitle: '新的互动会显示在这里'),
           ],
+        ),
+      );
+}
+
+class _EmptyStateCard extends StatelessWidget {
+  const _EmptyStateCard(
+      {required this.icon, required this.title, required this.subtitle});
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  @override
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Column(children: [
+            Icon(icon, size: 42),
+            const SizedBox(height: 10),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 4),
+            Text(subtitle,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          ]),
         ),
       );
 }
@@ -856,6 +942,11 @@ class Friend3ProfilePage extends StatelessWidget {
             title: '切换账户',
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const AccountSwitchPage()))),
+        _ProfileAction(
+            icon: Icons.qr_code_2,
+            title: '我的二维码',
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const MyQrCodePage()))),
       ]),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () => Navigator.push(context,
@@ -864,6 +955,38 @@ class Friend3ProfilePage extends StatelessWidget {
           label: const Text('发帖')),
     );
   }
+}
+
+class MyQrCodePage extends StatelessWidget {
+  const MyQrCodePage({super.key});
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('我的二维码')),
+        body: ListView(
+          padding: const EdgeInsets.all(28),
+          children: [
+            const Text('Friend 用户',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 22),
+            Container(
+              height: 260,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              child: const Center(
+                  child: Icon(Icons.qr_code_2, size: 190, color: Colors.black)),
+            ),
+            const SizedBox(height: 18),
+            const Text('扫一扫，添加我为好友', textAlign: TextAlign.center),
+            const SizedBox(height: 18),
+            OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.ios_share),
+                label: const Text('保存或分享二维码')),
+          ],
+        ),
+      );
 }
 
 class TopicPage extends StatelessWidget {
@@ -931,12 +1054,67 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('账户设置')),
+        body: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            const _SettingsGroup(
+                title: '账号与安全', items: ['账号信息', '修改密码', '绑定邮箱和手机号']),
+            _SettingsGroup(
+              title: '隐私与通知',
+              items: const ['隐私设置', '通知设置', '黑名单'],
+              onItemTap: (item) {
+                if (item == '通知设置') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const NotificationSettingsPage()));
+                }
+              },
+            ),
+            const _SettingsGroup(
+                title: '其他', items: ['清理缓存', '关于 Friend3', '退出登录']),
+          ],
+        ),
+      );
+}
+
+class NotificationSettingsPage extends StatefulWidget {
+  const NotificationSettingsPage({super.key});
+  @override
+  State<NotificationSettingsPage> createState() =>
+      _NotificationSettingsPageState();
+}
+
+class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
+  bool likes = true;
+  bool comments = true;
+  bool follows = true;
+  bool system = true;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('通知设置')),
         body: ListView(padding: const EdgeInsets.all(18), children: [
-          const _SettingsGroup(
-              title: '账号与安全', items: ['账号信息', '修改密码', '绑定邮箱和手机号']),
-          const _SettingsGroup(title: '隐私与通知', items: ['隐私设置', '通知设置', '黑名单']),
-          const _SettingsGroup(
-              title: '其他', items: ['清理缓存', '关于 Friend3', '退出登录']),
+          SwitchListTile(
+              title: const Text('点赞通知'),
+              subtitle: const Text('有人点赞你的内容时通知'),
+              value: likes,
+              onChanged: (v) => setState(() => likes = v)),
+          SwitchListTile(
+              title: const Text('评论通知'),
+              subtitle: const Text('有人评论你的内容时通知'),
+              value: comments,
+              onChanged: (v) => setState(() => comments = v)),
+          SwitchListTile(
+              title: const Text('关注通知'),
+              subtitle: const Text('有人关注你时通知'),
+              value: follows,
+              onChanged: (v) => setState(() => follows = v)),
+          SwitchListTile(
+              title: const Text('系统通知'),
+              subtitle: const Text('接收 Friend3 系统消息'),
+              value: system,
+              onChanged: (v) => setState(() => system = v)),
         ]),
       );
 }
@@ -961,9 +1139,11 @@ class AccountSwitchPage extends StatelessWidget {
 }
 
 class _SettingsGroup extends StatelessWidget {
-  const _SettingsGroup({required this.title, required this.items});
+  const _SettingsGroup(
+      {required this.title, required this.items, this.onItemTap});
   final String title;
   final List<String> items;
+  final ValueChanged<String>? onItemTap;
   @override
   Widget build(BuildContext context) =>
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -977,6 +1157,7 @@ class _SettingsGroup extends StatelessWidget {
           child: Column(
             children: items
                 .map((item) => ListTile(
+                      onTap: onItemTap == null ? null : () => onItemTap!(item),
                       title: Text(item),
                       trailing: const Icon(Icons.chevron_right),
                     ))
