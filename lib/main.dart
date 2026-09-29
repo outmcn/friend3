@@ -920,70 +920,104 @@ class ContentDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-          actions: [
-            IconButton(onPressed: () {}, icon: const _FigmaIcon('bookmark')),
-            IconButton(
-                onPressed: () => _showShare(context),
-                icon: const _FigmaIcon('share')),
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(18),
-          children: [
-            Container(
-              height: 260,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                image: DecorationImage(
-                  image: AssetImage(video
-                      ? 'assets/figma/post-thumbnail-1.jpg'
-                      : 'assets/figma/post-thumbnail-2.jpg'),
-                  fit: BoxFit.cover,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 52,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const _FigmaIcon('back'),
+                    ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const _FigmaIcon('bookmark'),
+                    ),
+                    IconButton(
+                      onPressed: () => _showShare(context),
+                      icon: const _FigmaIcon('share'),
+                    ),
+                  ],
                 ),
               ),
-              child: Center(
-                  child: Icon(
-                      video ? Icons.play_circle_fill : Icons.image_outlined,
-                      size: 76,
-                      color: Colors.white)),
-            ),
-            const SizedBox(height: 18),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => OtherProfilePage(
-                    name: authorName,
-                    avatarAsset: authorAsset,
-                  ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(18, 6, 18, 28),
+                  children: [
+                    Container(
+                      height: 260,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        image: DecorationImage(
+                          image: AssetImage(video
+                              ? 'assets/figma/post-thumbnail-1.jpg'
+                              : 'assets/figma/post-thumbnail-2.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          video ? Icons.play_circle_fill : Icons.image_outlined,
+                          size: 76,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => OtherProfilePage(
+                            name: authorName,
+                            avatarAsset: authorAsset,
+                          ),
+                        ),
+                      ),
+                      leading: CircleAvatar(
+                          backgroundImage: AssetImage(authorAsset)),
+                      title: Text(authorName,
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
+                      subtitle: const Text('刚刚发布'),
+                      trailing: const OutlinedButton(
+                          onPressed: null, child: Text('关注')),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text('分享生活中的有趣瞬间，发现更多真实内容。',
+                        style: TextStyle(fontSize: 17, height: 1.45)),
+                    const SizedBox(height: 20),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _DetailAction(
+                              icon: 'heart', label: '点赞', onTap: () {}),
+                          _DetailAction(
+                              icon: 'comment', label: '评论', onTap: () {}),
+                          _DetailAction(
+                              icon: 'bookmark', label: '收藏', onTap: () {}),
+                        ]),
+                    const SizedBox(height: 24),
+                    const Text('评论',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 12),
+                    const _CommentPreview(),
+                    const _CommentPreview(),
+                  ],
                 ),
               ),
-              leading: CircleAvatar(backgroundImage: AssetImage(authorAsset)),
-              title: Text(authorName,
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: const Text('刚刚发布'),
-              trailing:
-                  const OutlinedButton(onPressed: null, child: Text('关注')),
-            ),
-            const SizedBox(height: 12),
-            const Text('分享生活中的有趣瞬间，发现更多真实内容。',
-                style: TextStyle(fontSize: 17, height: 1.45)),
-            const SizedBox(height: 20),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              _DetailAction(icon: 'heart', label: '点赞', onTap: () {}),
-              _DetailAction(icon: 'comment', label: '评论', onTap: () {}),
-              _DetailAction(icon: 'bookmark', label: '收藏', onTap: () {}),
-            ]),
-            const SizedBox(height: 24),
-            const Text('评论',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 12),
-            const _CommentPreview(),
-            const _CommentPreview(),
-          ],
+            ],
+          ),
         ),
       );
 
@@ -1015,11 +1049,15 @@ class _DetailAction extends StatelessWidget {
 class _CommentPreview extends StatelessWidget {
   const _CommentPreview();
   @override
-  Widget build(BuildContext context) => const ListTile(
+  Widget build(BuildContext context) => ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: CircleAvatar(child: Icon(Icons.person)),
-        title: Text('用户评论'),
-        subtitle: Text('这条内容很有意思，期待更多分享。'),
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: const Icon(Icons.person, color: Colors.white),
+        ),
+        title:
+            const Text('用户评论', style: TextStyle(fontWeight: FontWeight.w700)),
+        subtitle: const Text('这条内容很有意思，期待更多分享。'),
       );
 }
 
