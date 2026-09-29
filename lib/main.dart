@@ -162,16 +162,34 @@ class LoginPage extends StatelessWidget {
                 label: '登录',
                 onTap: () => Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+            const SizedBox(height: 18),
+            OutlinedButton.icon(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FilledLoginPage()),
+              ),
+              icon: const Icon(Icons.check_circle_outline),
+              label: const Text('查看已填写登录状态'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const VerificationPage(title: '邮箱登录验证码'),
+                ),
+              ),
+              child: const Text('邮箱验证码登录'),
+            ),
             const SizedBox(height: 20),
             const Text('或使用以下方式登录'),
-            const SizedBox(height: 16),
             Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  _SocialLogin(icon: Icons.mail_outline, label: '邮箱'),
-                  _SocialLogin(icon: Icons.chat_bubble_outline, label: '微信'),
-                  _SocialLogin(icon: Icons.people_outline, label: 'QQ'),
-                ]),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                _SocialLogin(icon: Icons.mail_outline, label: '邮箱'),
+                _SocialLogin(icon: Icons.chat_bubble_outline, label: '微信'),
+                _SocialLogin(icon: Icons.people_outline, label: 'QQ'),
+              ],
+            ),
             const SizedBox(height: 18),
             TextButton(
                 onPressed: () => Navigator.push(context,
@@ -401,11 +419,12 @@ class PasswordSetupPage extends StatelessWidget {
               obscureText: true),
           const SizedBox(height: 24),
           _PrimaryAuthButton(
-              label: '完成注册',
-              onTap: () => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const Friend3Shell()),
-                  (_) => false)),
+            label: '完成注册',
+            onTap: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const Friend3Shell()),
+                (_) => false),
+          ),
         ]),
       );
 }
