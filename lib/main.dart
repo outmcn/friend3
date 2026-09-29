@@ -183,13 +183,6 @@ class OnboardingPage extends StatelessWidget {
                           MaterialPageRoute(builder: (_) => const LoginPage())),
                       child: const Text('开始使用'))),
               const SizedBox(height: 12),
-              Center(
-                  child: TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const RegisterPage())),
-                      child: const Text('创建新账号'))),
             ],
           ),
         ),

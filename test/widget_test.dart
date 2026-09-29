@@ -7,7 +7,6 @@ void main() {
     await tester.pumpWidget(const Friend3App());
     expect(find.text('Friend3'), findsOneWidget);
     expect(find.text('开始使用'), findsOneWidget);
-    expect(find.text('创建新账号'), findsOneWidget);
   });
 
   testWidgets('Friend3 auth flow opens home shell', (tester) async {
