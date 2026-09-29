@@ -913,46 +913,101 @@ class _DiscoverTile extends StatelessWidget {
       );
 }
 
-class CreatePostPage extends StatelessWidget {
+class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
+  @override
+  State<CreatePostPage> createState() => _CreatePostPageState();
+}
+
+class _CreatePostPageState extends State<CreatePostPage> {
+  String? mediaType;
+  String visibility = '所有人可见';
+  bool publishing = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close)),
-        title: const Text('发布帖子'),
-        actions: [TextButton(onPressed: () {}, child: const Text('发布'))],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(18),
-        children: [
-          const TextField(
-              maxLines: 7,
-              decoration: InputDecoration(
-                  hintText: '分享此刻的想法…', alignLabelWithHint: true)),
-          const SizedBox(height: 16),
-          const Row(children: [
-            _MediaAction(icon: Icons.photo_outlined, label: '图片'),
-            _MediaAction(icon: Icons.videocam_outlined, label: '视频'),
-            _MediaAction(icon: Icons.tag, label: '话题')
-          ]),
-          const SizedBox(height: 24),
-          const Text('可见范围', style: TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          const ListTile(
-              leading: Icon(Icons.public),
-              title: Text('所有人可见'),
-              trailing: Icon(Icons.chevron_right)),
-          const SizedBox(height: 18),
-          _ContentPreviewCard(
-              title: '添加话题', subtitle: '让更多人发现你的帖子', icon: Icons.tag),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close)),
+          title: const Text('发布帖子'),
+          actions: [
+            TextButton(
+              onPressed: publishing
+                  ? null
+                  : () async {
+                      setState(() => publishing = true);
+                      await Future<void>.delayed(
+                          const Duration(milliseconds: 350));
+                      if (mounted) setState(() => publishing = false);
+                    },
+              child: Text(publishing ? '发布中…' : '发布'),
+            ),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            const TextField(
+                maxLines: 7,
+                decoration: InputDecoration(
+                    hintText: '分享此刻的想法…', alignLabelWithHint: true)),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                _MediaAction(
+                  icon: Icons.photo_outlined,
+                  label: mediaType == '图片' ? '已选图片' : '图片',
+                  onTap: () => setState(() => mediaType = '图片'),
+                ),
+                _MediaAction(
+                  icon: Icons.videocam_outlined,
+                  label: mediaType == '视频' ? '已选视频' : '视频',
+                  onTap: () => setState(() => mediaType = '视频'),
+                ),
+                _MediaAction(
+                  icon: Icons.tag,
+                  label: mediaType == '话题' ? '已选话题' : '话题',
+                  onTap: () => setState(() => mediaType = '话题'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            const Text('可见范围', style: TextStyle(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 8),
+            ListTile(
+              leading: _iconFor(Icons.public),
+              title: Text(visibility),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showModalBottomSheet<void>(
+                context: context,
+                builder: (_) => SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: ['所有人可见', '仅关注者可见', '仅自己可见']
+                        .map(
+                          (item) => ListTile(
+                            title: Text(item),
+                            trailing: item == visibility
+                                ? const Icon(Icons.check)
+                                : null,
+                            onTap: () {
+                              setState(() => visibility = item);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            _ContentPreviewCard(
+                title: '添加话题', subtitle: '让更多人发现你的帖子', icon: Icons.tag),
+          ],
+        ),
+      );
 }
 
 class NotificationsPage extends StatelessWidget {
@@ -1191,15 +1246,31 @@ class ContentDetailPage extends StatelessWidget {
       );
 }
 
-class _DetailAction extends StatelessWidget {
+class _DetailAction extends StatefulWidget {
   const _DetailAction(
       {required this.icon, required this.label, required this.onTap});
   final String icon;
   final String label;
   final VoidCallback onTap;
   @override
+  State<_DetailAction> createState() => _DetailActionState();
+}
+
+class _DetailActionState extends State<_DetailAction> {
+  bool active = false;
+  @override
   Widget build(BuildContext context) => TextButton.icon(
-      onPressed: onTap, icon: _FigmaIcon(icon), label: Text(label));
+        onPressed: () {
+          setState(() => active = !active);
+          widget.onTap();
+        },
+        icon: _tdIcon(active && widget.icon == 'heart'
+            ? 'red-heart'
+            : active && widget.icon == 'bookmark'
+                ? 'bookmark-filled'
+                : widget.icon),
+        label: Text(active ? '已${widget.label}' : widget.label),
+      );
 }
 
 class _CommentPreview extends StatelessWidget {
@@ -1809,13 +1880,14 @@ class _NotificationRow extends StatelessWidget {
 }
 
 class _MediaAction extends StatelessWidget {
-  const _MediaAction({required this.icon, required this.label});
+  const _MediaAction({required this.icon, required this.label, this.onTap});
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => Expanded(
           child: Column(children: [
-        IconButton.filledTonal(onPressed: () {}, icon: Icon(icon)),
+        IconButton.filledTonal(onPressed: onTap, icon: Icon(icon)),
         Text(label)
       ]));
 }
