@@ -99,6 +99,16 @@ class LoginPage extends StatelessWidget {
             const _AuthField(
                 label: '密码', icon: Icons.lock_outline, obscureText: true),
             Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const PhoneLoginPage()),
+                ),
+                child: const Text('使用手机号登录'),
+              ),
+            ),
+            Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () => Navigator.push(
@@ -145,6 +155,29 @@ class RegisterPage extends StatelessWidget {
             const _AuthField(label: '用户名', icon: Icons.person_outline),
             const SizedBox(height: 14),
             const _AuthField(label: '邮箱或手机号', icon: Icons.alternate_email),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Wrap(
+                spacing: 8,
+                children: [
+                  OutlinedButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const EmailRegisterPage()),
+                    ),
+                    child: const Text('邮箱注册'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const PhoneLoginPage()),
+                    ),
+                    child: const Text('手机注册'),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 14),
             const _AuthField(
                 label: '设置密码', icon: Icons.lock_outline, obscureText: true),
@@ -192,7 +225,18 @@ class PhoneLoginPage extends StatelessWidget {
         title: '手机号登录',
         subtitle: '使用手机号和验证码登录',
         child: Column(children: [
-          const _AuthField(label: '国家/地区 +86', icon: Icons.language),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.language),
+            title: const Text('国家/地区'),
+            subtitle: const Text('+86 中国大陆'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => showModalBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              builder: (_) => const _CountryPickerSheet(),
+            ),
+          ),
           const SizedBox(height: 14),
           const _AuthField(label: '手机号码', icon: Icons.phone_outlined),
           const SizedBox(height: 14),
@@ -225,6 +269,35 @@ class EmailRegisterPage extends StatelessWidget {
                       builder: (_) => const PasswordSetupPage()))),
         ]),
       );
+}
+
+class _CountryPickerSheet extends StatelessWidget {
+  const _CountryPickerSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    const countries = ['中国大陆 +86', '中国香港 +852', '中国澳门 +853', '中国台湾 +886'];
+    return SafeArea(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 8, 20, 12),
+            child: Text('选择国家/地区',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+          ),
+          ...countries.map(
+            (country) => ListTile(
+              title: Text(country),
+              trailing:
+                  country.startsWith('中国大陆') ? const Icon(Icons.check) : null,
+              onTap: () => Navigator.pop(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class PasswordSetupPage extends StatelessWidget {
@@ -491,47 +564,53 @@ class _QuickAction extends StatelessWidget {
 
 class DiscoverPage extends StatelessWidget {
   const DiscoverPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           title:
               const Text('发现', style: TextStyle(fontWeight: FontWeight.w800))),
-      body: ListView(padding: const EdgeInsets.all(18), children: [
-        const TextField(
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: '搜索话题、活动和用户')),
-        const SizedBox(height: 18),
-        _DiscoverTile(
-            icon: Icons.local_fire_department,
-            title: '热门话题',
-            subtitle: '看看大家正在讨论什么',
-            onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const TopicPage()))),
-        _DiscoverTile(
-            icon: Icons.event_available,
-            title: '活动中心',
-            subtitle: '参加线上线下有趣活动',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const EventsPage()))),
-        _DiscoverTile(
-            icon: Icons.trending_up,
-            title: '趋势榜单',
-            subtitle: '本周最受关注的内容',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const TrendsPage()))),
-        const SizedBox(height: 18),
-        const Text('热门话题',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: ['周末去哪儿', '电影分享', '城市漫步', '新朋友']
-              .map((e) => Chip(label: Text('#$e')))
-              .toList(),
-        ),
-      ]),
+      body: ListView(
+        padding: const EdgeInsets.all(18),
+        children: [
+          const TextField(
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search), hintText: '搜索话题、活动和用户')),
+          const SizedBox(height: 18),
+          _DiscoverTile(
+              icon: Icons.local_fire_department,
+              title: '热门话题',
+              subtitle: '看看大家正在讨论什么',
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const TopicPage()))),
+          _DiscoverTile(
+              icon: Icons.event_available,
+              title: '活动中心',
+              subtitle: '参加线上线下有趣活动',
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const EventsPage()))),
+          _DiscoverTile(
+              icon: Icons.trending_up,
+              title: '趋势榜单',
+              subtitle: '本周最受关注的内容',
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const TrendsPage()))),
+          const SizedBox(height: 18),
+          const Text('热门话题',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 12),
+          Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: ['周末去哪儿', '电影分享', '城市漫步', '新朋友']
+                  .map((e) => Chip(label: Text('#$e')))
+                  .toList()),
+          const SizedBox(height: 18),
+          const _ContentPreviewCard(
+              title: '为你推荐', subtitle: '发现更多有趣内容', icon: Icons.auto_awesome),
+        ],
+      ),
     );
   }
 }
@@ -543,35 +622,35 @@ class CreatePostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('创建帖子'),
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.close)),
+        title: const Text('发布帖子'),
         actions: [TextButton(onPressed: () {}, child: const Text('发布'))],
       ),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
           const TextField(
-            maxLines: 7,
-            decoration: InputDecoration(
-              hintText: '分享此刻的想法…',
-              alignLabelWithHint: true,
-            ),
-          ),
+              maxLines: 7,
+              decoration: InputDecoration(
+                  hintText: '分享此刻的想法…', alignLabelWithHint: true)),
           const SizedBox(height: 16),
-          const Row(
-            children: [
-              _MediaAction(icon: Icons.photo_outlined, label: '图片'),
-              _MediaAction(icon: Icons.videocam_outlined, label: '视频'),
-              _MediaAction(icon: Icons.tag, label: '话题'),
-            ],
-          ),
+          const Row(children: [
+            _MediaAction(icon: Icons.photo_outlined, label: '图片'),
+            _MediaAction(icon: Icons.videocam_outlined, label: '视频'),
+            _MediaAction(icon: Icons.tag, label: '话题')
+          ]),
           const SizedBox(height: 24),
           const Text('可见范围', style: TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           const ListTile(
-            leading: Icon(Icons.public),
-            title: Text('所有人可见'),
-            trailing: Icon(Icons.chevron_right),
-          ),
+              leading: Icon(Icons.public),
+              title: Text('所有人可见'),
+              trailing: Icon(Icons.chevron_right)),
+          const SizedBox(height: 18),
+          const _ContentPreviewCard(
+              title: '添加话题', subtitle: '让更多人发现你的帖子', icon: Icons.tag),
         ],
       ),
     );
@@ -825,6 +904,30 @@ class _SectionTitle extends StatelessWidget {
         Text(action,
             style: TextStyle(color: Theme.of(context).colorScheme.primary))
       ]));
+}
+
+class _ContentPreviewCard extends StatelessWidget {
+  const _ContentPreviewCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(child: Icon(icon)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.chevron_right),
+      ),
+    );
+  }
 }
 
 class _CreatorChip extends StatelessWidget {
