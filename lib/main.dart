@@ -380,8 +380,13 @@ class ProfileSetupPage extends StatelessWidget {
         subtitle: '让大家更快认识你',
         child: Column(
           children: [
-            const CircleAvatar(
-                radius: 46, child: Icon(Icons.add_a_photo_outlined, size: 30)),
+            CircleAvatar(
+              radius: 46,
+              backgroundImage:
+                  const AssetImage('assets/figma/profile-portrait-1.jpg'),
+              onBackgroundImageError: (_, __) {},
+              child: const Icon(Icons.add_a_photo_outlined, size: 30),
+            ),
             const SizedBox(height: 20),
             const _AuthField(label: '昵称', icon: Icons.badge_outlined),
             const SizedBox(height: 14),
@@ -1336,14 +1341,20 @@ class _ContentPreviewCard extends StatelessWidget {
 class _CreatorChip extends StatelessWidget {
   const _CreatorChip({required this.index});
   final int index;
+  static const _images = [
+    'assets/figma/profile-portrait-1.jpg',
+    'assets/figma/profile-portrait-2.jpg',
+    'assets/figma/profile-portrait-3.jpg',
+    'assets/figma/profile-portrait-4.jpg',
+    'assets/figma/profile-portrait-5.jpg',
+  ];
   @override
   Widget build(BuildContext context) => SizedBox(
       width: 76,
       child: Column(children: [
         CircleAvatar(
             radius: 31,
-            backgroundImage: AssetImage(
-                index.isEven ? 'assets/story.jpg' : 'assets/mystory.jpg')),
+            backgroundImage: AssetImage(_images[index % _images.length])),
         const SizedBox(height: 7),
         Text('用户${index + 1}', overflow: TextOverflow.ellipsis)
       ]));
