@@ -607,8 +607,19 @@ class DiscoverPage extends StatelessWidget {
                   .map((e) => Chip(label: Text('#$e')))
                   .toList()),
           const SizedBox(height: 18),
-          const _ContentPreviewCard(
-              title: '为你推荐', subtitle: '发现更多有趣内容', icon: Icons.auto_awesome),
+          _ContentPreviewCard(
+              title: '为你推荐',
+              subtitle: '发现更多有趣内容',
+              icon: Icons.auto_awesome,
+              onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ContentDetailPage(
+                        title: '为你推荐',
+                        video: true,
+                      ),
+                    ),
+                  )),
         ],
       ),
     );
@@ -649,7 +660,7 @@ class CreatePostPage extends StatelessWidget {
               title: Text('所有人可见'),
               trailing: Icon(Icons.chevron_right)),
           const SizedBox(height: 18),
-          const _ContentPreviewCard(
+          _ContentPreviewCard(
               title: '添加话题', subtitle: '让更多人发现你的帖子', icon: Icons.tag),
         ],
       ),
@@ -659,29 +670,134 @@ class CreatePostPage extends StatelessWidget {
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('通知', style: TextStyle(fontWeight: FontWeight.w800)),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(18),
-        children: const [
-          _NotificationRow(
-              icon: Icons.favorite, title: '点赞通知', subtitle: '还没有新的点赞'),
-          _NotificationRow(
-              icon: Icons.chat_bubble_outline,
-              title: '评论通知',
-              subtitle: '还没有新的评论'),
-          _NotificationRow(
-              icon: Icons.person_add_alt_1, title: '关注通知', subtitle: '还没有新的关注'),
-          _NotificationRow(
-              icon: Icons.campaign_outlined, title: '系统通知', subtitle: '暂无系统通知'),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+            title: const Text('通知',
+                style: TextStyle(fontWeight: FontWeight.w800))),
+        body: ListView(
+          padding: const EdgeInsets.all(18),
+          children: const [
+            _NotificationRow(
+                icon: Icons.favorite, title: '点赞通知', subtitle: '还没有新的点赞'),
+            _NotificationRow(
+                icon: Icons.chat_bubble_outline,
+                title: '评论通知',
+                subtitle: '还没有新的评论'),
+            _NotificationRow(
+                icon: Icons.person_add_alt_1,
+                title: '关注通知',
+                subtitle: '还没有新的关注'),
+            _NotificationRow(
+                icon: Icons.campaign_outlined,
+                title: '系统通知',
+                subtitle: '暂无系统通知'),
+          ],
+        ),
+      );
+}
+
+class ContentDetailPage extends StatelessWidget {
+  const ContentDetailPage(
+      {super.key, required this.title, required this.video});
+
+  final String title;
+  final bool video;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          actions: [
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.bookmark_border)),
+            IconButton(
+                onPressed: () => _showShare(context),
+                icon: const Icon(Icons.share_outlined)),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            Container(
+              height: 260,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: const LinearGradient(
+                    colors: [Color(0xff5d3fd3), Color(0xffdc679c)]),
+              ),
+              child: Center(
+                  child: Icon(
+                      video ? Icons.play_circle_fill : Icons.image_outlined,
+                      size: 76,
+                      color: Colors.white)),
+            ),
+            const SizedBox(height: 18),
+            const ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: CircleAvatar(child: Icon(Icons.person)),
+              title:
+                  Text('推荐用户', style: TextStyle(fontWeight: FontWeight.w700)),
+              subtitle: Text('刚刚发布'),
+              trailing: OutlinedButton(onPressed: null, child: Text('关注')),
+            ),
+            const SizedBox(height: 12),
+            const Text('分享生活中的有趣瞬间，发现更多真实内容。',
+                style: TextStyle(fontSize: 17, height: 1.45)),
+            const SizedBox(height: 20),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              _DetailAction(
+                  icon: Icons.favorite_border, label: '点赞', onTap: () {}),
+              _DetailAction(
+                  icon: Icons.chat_bubble_outline, label: '评论', onTap: () {}),
+              _DetailAction(
+                  icon: Icons.bookmark_border, label: '收藏', onTap: () {}),
+            ]),
+            const SizedBox(height: 24),
+            const Text('评论',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 12),
+            const _CommentPreview(),
+            const _CommentPreview(),
+          ],
+        ),
+      );
+
+  void _showShare(BuildContext context) => showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        builder: (_) => SafeArea(
+          child: Wrap(children: const [
+            ListTile(leading: Icon(Icons.link), title: Text('复制链接')),
+            ListTile(
+                leading: Icon(Icons.chat_bubble_outline), title: Text('分享给好友')),
+            ListTile(leading: Icon(Icons.more_horiz), title: Text('更多分享方式')),
+          ]),
+        ),
+      );
+}
+
+class _DetailAction extends StatelessWidget {
+  const _DetailAction(
+      {required this.icon, required this.label, required this.onTap});
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) =>
+      TextButton.icon(onPressed: onTap, icon: Icon(icon), label: Text(label));
+}
+
+class _CommentPreview extends StatelessWidget {
+  const _CommentPreview();
+  @override
+  Widget build(BuildContext context) => const ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: CircleAvatar(child: Icon(Icons.person)),
+        title: Text('用户评论'),
+        subtitle: Text('这条内容很有意思，期待更多分享。'),
+      );
 }
 
 class Friend3ProfilePage extends StatelessWidget {
@@ -911,16 +1027,19 @@ class _ContentPreviewCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
+    this.onTap,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: onTap,
         leading: CircleAvatar(child: Icon(icon)),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle),
