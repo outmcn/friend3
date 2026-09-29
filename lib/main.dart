@@ -744,83 +744,125 @@ class DiscoverPage extends StatelessWidget {
   const DiscoverPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
           title:
-              const Text('发现', style: TextStyle(fontWeight: FontWeight.w800))),
-      body: ListView(
-        padding: const EdgeInsets.all(18),
-        children: [
-          const TextField(
+              const Text('发现', style: TextStyle(fontWeight: FontWeight.w800)),
+          actions: [
+            IconButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const RecommendationFeedPage()),
+              ),
+              icon: const Icon(Icons.add_circle_outline),
+            ),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.fromLTRB(18, 8, 18, 28),
+          children: [
+            const TextField(
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search), hintText: '搜索话题、活动和用户')),
-          const SizedBox(height: 18),
-          _DiscoverTile(
+                prefixIcon: Icon(Icons.search),
+                hintText: '搜索话题、活动和用户',
+              ),
+            ),
+            const SizedBox(height: 18),
+            _DiscoverTile(
               icon: Icons.local_fire_department,
               title: '热门话题',
               subtitle: '看看大家正在讨论什么',
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const TopicPage()))),
-          _DiscoverTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TopicPage()),
+              ),
+            ),
+            _DiscoverTile(
               icon: Icons.event_available,
               title: '活动中心',
               subtitle: '参加线上线下有趣活动',
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const EventsPage()))),
-          _DiscoverTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EventsPage()),
+              ),
+            ),
+            _DiscoverTile(
               icon: Icons.trending_up,
               title: '趋势榜单',
               subtitle: '本周最受关注的内容',
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const TrendsPage()))),
-          const SizedBox(height: 18),
-          const Text('热门话题',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 12),
-          Wrap(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TrendsPage()),
+              ),
+            ),
+            const SizedBox(height: 18),
+            const _SectionTitle(title: '热门话题', action: '全部'),
+            Wrap(
               spacing: 8,
               runSpacing: 8,
               children: ['周末去哪儿', '电影分享', '城市漫步', '新朋友']
                   .map((e) => Chip(label: Text('#$e')))
-                  .toList()),
-          const SizedBox(height: 18),
-          _ContentPreviewCard(
+                  .toList(),
+            ),
+            const SizedBox(height: 18),
+            _ContentPreviewCard(
               title: '为你推荐',
               subtitle: '发现更多有趣内容',
               icon: Icons.auto_awesome,
+              imageAsset: 'assets/figma/post-thumbnail-4.jpg',
               onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const ContentDetailPage(
-                        title: '为你推荐',
-                        video: true,
-                      ),
-                    ),
-                  )),
-          const SizedBox(height: 12),
-          _TrendPreviewCard(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const TrendsPage()),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _RecommendationPreviewCard(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const ContentDetailPage(
-                  title: '推荐视频',
-                  video: true,
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const ContentDetailPage(title: '为你推荐', video: true),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 12),
+            _TrendPreviewCard(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TrendsPage()),
+              ),
+            ),
+            const SizedBox(height: 12),
+            _RecommendationPreviewCard(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const ContentDetailPage(title: '推荐视频', video: true),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+class _DiscoverTile extends StatelessWidget {
+  const _DiscoverTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => Card(
+        child: ListTile(
+          onTap: onTap,
+          leading: _iconFor(icon),
+          title:
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+          subtitle: Text(subtitle),
+          trailing: const Icon(Icons.chevron_right),
+        ),
+      );
 }
 
 class CreatePostPage extends StatelessWidget {
@@ -1646,29 +1688,6 @@ class _RecommendationRow extends StatelessWidget {
       title: Text('推荐用户'),
       subtitle: Text('分享了新的生活动态'),
       trailing: Icon(Icons.chevron_right));
-}
-
-class _DiscoverTile extends StatelessWidget {
-  const _DiscoverTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.onTap,
-  });
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback? onTap;
-  @override
-  Widget build(BuildContext context) => Card(
-        child: ListTile(
-          onTap: onTap,
-          leading: CircleAvatar(child: Icon(icon)),
-          title: Text(title),
-          subtitle: Text(subtitle),
-          trailing: const Icon(Icons.chevron_right),
-        ),
-      );
 }
 
 class _NotificationRow extends StatelessWidget {
