@@ -580,20 +580,20 @@ class _Friend3ShellState extends State<Friend3Shell> {
         onDestinationSelected: (value) => setState(() => index = value),
         destinations: const [
           NavigationDestination(
-              icon: _FigmaIcon('home'),
-              selectedIcon: _FigmaIcon('home-filled'),
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
               label: '首页'),
           NavigationDestination(
-              icon: _FigmaIcon('video'),
-              selectedIcon: _FigmaIcon('video-filled'),
+              icon: Icon(Icons.explore_outlined),
+              selectedIcon: Icon(Icons.explore),
               label: '发现'),
           NavigationDestination(
-              icon: _FigmaIcon('notification'),
-              selectedIcon: _FigmaIcon('notification'),
+              icon: Icon(Icons.notifications_none),
+              selectedIcon: Icon(Icons.notifications),
               label: '通知'),
           NavigationDestination(
-              icon: _FigmaIcon('account'),
-              selectedIcon: _FigmaIcon('account-filled'),
+              icon: Icon(Icons.person_outline),
+              selectedIcon: Icon(Icons.person),
               label: '我的'),
         ],
       ),

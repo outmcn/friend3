@@ -91,3 +91,6 @@ Figma 文件头：`fig-kiwi`，版本 `95`。
 
 
 组件与图标批次：引入腾讯 TDesign Flutter 图标包 `tdesign_flutter_icons`，新增统一 `_tdIcon` 适配器，并将主要导航、搜索、通知、收藏、点赞、评论、分享、返回、更多等图标路径切换到腾讯图标；页面业务复合组件和 Material 布局原语保留。
+
+
+底部 Tab 修正：按用户要求改回 Flutter 官方 `NavigationBar` 图标，使用 `Icons.home/explore/notifications/person` 及对应 outline 版本；页面切换逻辑保持不变，腾讯图标仅用于页面内其他匹配图标。
