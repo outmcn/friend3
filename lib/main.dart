@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 void main() => runApp(const Friend3App());
 
@@ -34,16 +35,36 @@ class Friend3App extends StatelessWidget {
 }
 
 class _FigmaIcon extends StatelessWidget {
-  const _FigmaIcon(this.name, {this.size = 22});
+  const _FigmaIcon(this.name);
   final String name;
-  final double size;
   @override
   Widget build(BuildContext context) => SvgPicture.asset(
         'assets/icons/$name.svg',
-        width: size,
-        height: size,
+        width: 22,
+        height: 22,
         color: Theme.of(context).colorScheme.onSurface,
       );
+}
+
+Widget _tdIcon(String name, {double size = 22, Color? color}) {
+  final icons = <String, IconData>{
+    'home': TIcons.home,
+    'home-filled': TIcons.home_filled,
+    'account': TIcons.user_avatar,
+    'account-filled': TIcons.user_avatar_filled,
+    'search': TIcons.search,
+    'notification': TIcons.notification,
+    'bookmark': TIcons.bookmark,
+    'heart': TIcons.heart,
+    'comment': TIcons.chat_bubble,
+    'share': TIcons.share,
+    'link': TIcons.link,
+    'more': TIcons.more,
+    'back': TIcons.chevron_left,
+    'video': TIcons.video,
+    'video-filled': TIcons.video_filled,
+  };
+  return Icon(icons[name] ?? TIcons.help_circle, size: size, color: color);
 }
 
 Widget _iconFor(IconData icon, {double size = 22}) {
@@ -67,8 +88,8 @@ Widget _iconFor(IconData icon, {double size = 22}) {
     Icons.keyboard_arrow_down: 'down-arrow',
   };
   final name = map[icon];
-  if (name == null) return Icon(icon, size: size);
-  return _FigmaIcon(name, size: size);
+  if (name == null) return _tdIcon('unknown', size: size);
+  return _tdIcon(name, size: size, color: Colors.white);
 }
 
 class OnboardingPage extends StatelessWidget {
@@ -591,7 +612,7 @@ class Friend3HomePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {},
-              icon: const _FigmaIcon('search'),
+              icon: _tdIcon('search'),
             )
           ]),
       body: ListView(
@@ -990,7 +1011,7 @@ class ContentDetailPage extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const _FigmaIcon('back'),
+                      icon: _tdIcon('back'),
                     ),
                     Expanded(
                       child: Text(
@@ -1001,11 +1022,11 @@ class ContentDetailPage extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: const _FigmaIcon('bookmark'),
+                      icon: _tdIcon('bookmark'),
                     ),
                     IconButton(
                       onPressed: () => _showShare(context),
-                      icon: const _FigmaIcon('share'),
+                      icon: _tdIcon('share'),
                     ),
                   ],
                 ),
@@ -1137,7 +1158,7 @@ class OtherProfilePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () => _showProfileMenu(context),
-              icon: const _FigmaIcon('more'),
+              icon: _tdIcon('more'),
             ),
           ],
         ),
@@ -1231,7 +1252,7 @@ class Friend3ProfilePage extends StatelessWidget {
             IconButton(
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const SettingsPage())),
-                icon: const _FigmaIcon('more'))
+                icon: _tdIcon('more'))
           ]),
       body: ListView(padding: const EdgeInsets.all(18), children: [
         const Row(children: [
