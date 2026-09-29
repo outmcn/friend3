@@ -420,7 +420,71 @@ class Friend3HomePage extends StatelessWidget {
             const _SectionTitle(title: '为你推荐', action: '刷新'),
             const _RecommendationRow(),
             const _RecommendationRow(),
+            const SizedBox(height: 18),
+            _HomeQuickActions(
+              onCreatePost: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CreatePostPage()),
+              ),
+            ),
           ]),
+    );
+  }
+}
+
+class _HomeQuickActions extends StatelessWidget {
+  const _HomeQuickActions({required this.onCreatePost});
+
+  final VoidCallback onCreatePost;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _QuickAction(
+            icon: Icons.add_box_outlined,
+            label: '创建帖子',
+            onTap: onCreatePost,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _QuickAction(
+            icon: Icons.notifications_none,
+            label: '通知中心',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const NotificationsPage()),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        leading: Icon(icon),
+        title: Text(label, style: const TextStyle(fontSize: 13)),
+        trailing: const Icon(Icons.chevron_right, size: 18),
+      ),
     );
   }
 }
