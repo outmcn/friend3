@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() => runApp(const Friend3App());
 
@@ -30,6 +31,18 @@ class Friend3App extends StatelessWidget {
       home: const OnboardingPage(),
     );
   }
+}
+
+class _FigmaIcon extends StatelessWidget {
+  const _FigmaIcon(this.name);
+  final String name;
+  @override
+  Widget build(BuildContext context) => SvgPicture.asset(
+        'assets/icons/$name.svg',
+        width: 22,
+        height: 22,
+        color: Theme.of(context).colorScheme.onSurface,
+      );
 }
 
 class OnboardingPage extends StatelessWidget {
@@ -530,7 +543,10 @@ class Friend3HomePage extends StatelessWidget {
           title:
               const Text('首页', style: TextStyle(fontWeight: FontWeight.w800)),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+            IconButton(
+              onPressed: () {},
+              icon: const _FigmaIcon('search'),
+            )
           ]),
       body: ListView(
           padding: const EdgeInsets.fromLTRB(18, 4, 18, 24),
@@ -871,11 +887,10 @@ class ContentDetailPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
           actions: [
-            IconButton(
-                onPressed: () {}, icon: const Icon(Icons.bookmark_border)),
+            IconButton(onPressed: () {}, icon: const _FigmaIcon('bookmark')),
             IconButton(
                 onPressed: () => _showShare(context),
-                icon: const Icon(Icons.share_outlined)),
+                icon: const _FigmaIcon('share')),
           ],
         ),
         body: ListView(
@@ -915,12 +930,9 @@ class ContentDetailPage extends StatelessWidget {
                 style: TextStyle(fontSize: 17, height: 1.45)),
             const SizedBox(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              _DetailAction(
-                  icon: Icons.favorite_border, label: '点赞', onTap: () {}),
-              _DetailAction(
-                  icon: Icons.chat_bubble_outline, label: '评论', onTap: () {}),
-              _DetailAction(
-                  icon: Icons.bookmark_border, label: '收藏', onTap: () {}),
+              _DetailAction(icon: 'heart', label: '点赞', onTap: () {}),
+              _DetailAction(icon: 'comment', label: '评论', onTap: () {}),
+              _DetailAction(icon: 'bookmark', label: '收藏', onTap: () {}),
             ]),
             const SizedBox(height: 24),
             const Text('评论',
@@ -936,11 +948,11 @@ class ContentDetailPage extends StatelessWidget {
         context: context,
         showDragHandle: true,
         builder: (_) => SafeArea(
-          child: Wrap(children: const [
-            ListTile(leading: Icon(Icons.link), title: Text('复制链接')),
-            ListTile(
-                leading: Icon(Icons.chat_bubble_outline), title: Text('分享给好友')),
-            ListTile(leading: Icon(Icons.more_horiz), title: Text('更多分享方式')),
+          child: Wrap(children: [
+            ListTile(leading: _FigmaIcon('link'), title: const Text('复制链接')),
+            const ListTile(
+                leading: _FigmaIcon('message'), title: Text('分享给好友')),
+            const ListTile(leading: _FigmaIcon('more'), title: Text('更多分享方式')),
           ]),
         ),
       );
@@ -949,12 +961,12 @@ class ContentDetailPage extends StatelessWidget {
 class _DetailAction extends StatelessWidget {
   const _DetailAction(
       {required this.icon, required this.label, required this.onTap});
-  final IconData icon;
+  final String icon;
   final String label;
   final VoidCallback onTap;
   @override
-  Widget build(BuildContext context) =>
-      TextButton.icon(onPressed: onTap, icon: Icon(icon), label: Text(label));
+  Widget build(BuildContext context) => TextButton.icon(
+      onPressed: onTap, icon: _FigmaIcon(icon), label: Text(label));
 }
 
 class _CommentPreview extends StatelessWidget {
@@ -980,7 +992,7 @@ class Friend3ProfilePage extends StatelessWidget {
             IconButton(
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const SettingsPage())),
-                icon: const Icon(Icons.settings_outlined))
+                icon: const _FigmaIcon('more'))
           ]),
       body: ListView(padding: const EdgeInsets.all(18), children: [
         const Row(children: [
