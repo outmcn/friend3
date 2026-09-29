@@ -105,6 +105,46 @@ Widget _iconFor(IconData icon, {double size = 22}) {
   return _tdIcon(name, size: size, color: Colors.white);
 }
 
+class _SafeAvatar extends StatelessWidget {
+  const _SafeAvatar({required this.asset});
+  final String asset;
+  @override
+  Widget build(BuildContext context) => CircleAvatar(
+        backgroundImage: AssetImage(asset),
+        onBackgroundImageError: (_, __) {},
+        child: const Icon(Icons.person),
+      );
+}
+
+class _SafeAssetImage extends StatelessWidget {
+  const _SafeAssetImage(
+      {required this.asset,
+      this.height,
+      this.width,
+      this.fit = BoxFit.cover,
+      this.borderRadius});
+  final String asset;
+  final double? height;
+  final double? width;
+  final BoxFit fit;
+  final BorderRadius? borderRadius;
+  @override
+  Widget build(BuildContext context) => ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: Image.asset(
+          asset,
+          height: height,
+          width: width,
+          fit: fit,
+          errorBuilder: (_, __, ___) => Container(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            alignment: Alignment.center,
+            child: TextButton(onPressed: () {}, child: const Text('重新加载')),
+          ),
+        ),
+      );
+}
+
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
@@ -128,12 +168,12 @@ class OnboardingPage extends StatelessWidget {
               const SizedBox(height: 34),
               ClipRRect(
                 borderRadius: BorderRadius.circular(34),
-                child: Image.asset(
-                  'assets/figma/hero-laptop.png',
-                  height: 220,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: _SafeAssetImage(
+                    asset: 'assets/figma/hero-laptop.png',
+                    height: 220,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(34)),
               ),
               const Spacer(),
               SizedBox(
@@ -1158,23 +1198,20 @@ class ContentDetailPage extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(18, 6, 18, 28),
                   children: [
-                    Container(
+                    _SafeAssetImage(
+                      asset: video
+                          ? 'assets/figma/post-thumbnail-1.jpg'
+                          : 'assets/figma/post-thumbnail-2.jpg',
                       height: 260,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        image: DecorationImage(
-                          image: AssetImage(video
-                              ? 'assets/figma/post-thumbnail-1.jpg'
-                              : 'assets/figma/post-thumbnail-2.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          video ? Icons.play_circle_fill : Icons.image_outlined,
-                          size: 76,
-                          color: Colors.white,
-                        ),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    Center(
+                      child: Icon(
+                        video ? Icons.play_circle_fill : Icons.image_outlined,
+                        size: 76,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 18),
@@ -1189,8 +1226,7 @@ class ContentDetailPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      leading: CircleAvatar(
-                          backgroundImage: AssetImage(authorAsset)),
+                      leading: _SafeAvatar(asset: authorAsset),
                       title: Text(authorName,
                           style: const TextStyle(fontWeight: FontWeight.w700)),
                       subtitle: const Text('刚刚发布'),
