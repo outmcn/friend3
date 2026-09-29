@@ -662,6 +662,41 @@ class _Friend3ShellState extends State<Friend3Shell> {
   }
 }
 
+class _PageLoadState extends StatelessWidget {
+  const _PageLoadState({required this.title, required this.subtitle});
+  final String title;
+  final String subtitle;
+  @override
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(children: [
+            const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(strokeWidth: 2)),
+            const SizedBox(width: 14),
+            Expanded(child: Text('$title\n$subtitle')),
+          ]),
+        ),
+      );
+}
+
+class _PageErrorState extends StatelessWidget {
+  const _PageErrorState({required this.title, required this.subtitle});
+  final String title;
+  final String subtitle;
+  @override
+  Widget build(BuildContext context) => Card(
+        child: ListTile(
+          leading: const Icon(Icons.cloud_off_outlined),
+          title: Text(title),
+          subtitle: Text(subtitle),
+          trailing: TextButton(onPressed: () {}, child: const Text('重试')),
+        ),
+      );
+}
+
 class Friend3HomePage extends StatelessWidget {
   const Friend3HomePage({super.key});
   @override
@@ -888,6 +923,8 @@ class DiscoverPage extends StatelessWidget {
                   .toList(),
             ),
             const SizedBox(height: 18),
+            const _PageLoadState(title: '推荐内容加载中', subtitle: '这是静态加载状态预览'),
+            const _PageErrorState(title: '推荐内容加载失败', subtitle: '网络异常时可点击重试'),
             _ContentPreviewCard(
               title: '为你推荐',
               subtitle: '发现更多有趣内容',
@@ -1076,6 +1113,8 @@ class NotificationsPage extends StatelessWidget {
                 title: '系统通知',
                 subtitle: '暂无系统通知'),
             SizedBox(height: 18),
+            _PageLoadState(title: '通知加载中', subtitle: '这是静态加载状态预览'),
+            _PageErrorState(title: '通知加载失败', subtitle: '网络异常时可点击重试'),
             _EmptyStateCard(
                 icon: Icons.notifications_none,
                 title: '暂无更多通知',
