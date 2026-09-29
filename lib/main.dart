@@ -89,132 +89,196 @@ class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AuthScaffold(
-      title: '登录 Friend3',
-      subtitle: '选择一种方式进入你的社区',
-      child: Column(
-        children: [
-          const TextField(decoration: InputDecoration(hintText: '邮箱 / 手机号')),
-          const SizedBox(height: 12),
-          const TextField(
-              obscureText: true, decoration: InputDecoration(hintText: '密码')),
-          Align(
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '登录',
+        subtitle: '使用邮箱或手机号登录',
+        child: Column(
+          children: [
+            const _AuthField(label: '邮箱或手机号', icon: Icons.person_outline),
+            const SizedBox(height: 14),
+            const _AuthField(
+                label: '密码', icon: Icons.lock_outline, obscureText: true),
+            Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const ResetPasswordPage())),
-                  child: const Text('验证码找回密码'))),
-          const SizedBox(height: 8),
-          SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                  onPressed: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (_) => const Friend3Shell())),
-                  child: const Text('登录'))),
-          const SizedBox(height: 20),
-          const Text('其他登录方式'),
-          const SizedBox(height: 12),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                _SocialLogin(icon: Icons.mail_outline, label: '邮箱'),
-                _SocialLogin(icon: Icons.chat_bubble_outline, label: '微信'),
-                _SocialLogin(icon: Icons.people_outline, label: 'QQ')
-              ]),
-        ],
-      ),
-    );
-  }
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ResetPasswordPage())),
+                child: const Text('验证码找回密码'),
+              ),
+            ),
+            const SizedBox(height: 10),
+            _PrimaryAuthButton(
+                label: '登录',
+                onTap: () => Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+            const SizedBox(height: 20),
+            const Text('或使用以下方式登录'),
+            const SizedBox(height: 16),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  _SocialLogin(icon: Icons.mail_outline, label: '邮箱'),
+                  _SocialLogin(icon: Icons.chat_bubble_outline, label: '微信'),
+                  _SocialLogin(icon: Icons.people_outline, label: 'QQ'),
+                ]),
+            const SizedBox(height: 18),
+            TextButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const RegisterPage())),
+                child: const Text('还没有账号？立即注册')),
+          ],
+        ),
+      );
 }
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AuthScaffold(
-      title: '创建账号',
-      subtitle: '完善基础信息，开始你的 Friend3 旅程',
-      child: Column(
-        children: [
-          const TextField(decoration: InputDecoration(hintText: '用户名')),
-          const SizedBox(height: 12),
-          const TextField(decoration: InputDecoration(hintText: '邮箱或手机号')),
-          const SizedBox(height: 12),
-          const TextField(
-              obscureText: true, decoration: InputDecoration(hintText: '设置密码')),
-          const SizedBox(height: 20),
-          SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const ProfileSetupPage())),
-                  child: const Text('下一步'))),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '注册',
+        subtitle: '创建账号，开始你的 Friend3 旅程',
+        child: Column(
+          children: [
+            const _AuthField(label: '用户名', icon: Icons.person_outline),
+            const SizedBox(height: 14),
+            const _AuthField(label: '邮箱或手机号', icon: Icons.alternate_email),
+            const SizedBox(height: 14),
+            const _AuthField(
+                label: '设置密码', icon: Icons.lock_outline, obscureText: true),
+            const SizedBox(height: 24),
+            _PrimaryAuthButton(
+                label: '继续',
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ProfileSetupPage()))),
+            const SizedBox(height: 14),
+            TextButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const LoginPage())),
+                child: const Text('已有账号？返回登录')),
+          ],
+        ),
+      );
 }
 
 class ResetPasswordPage extends StatelessWidget {
   const ResetPasswordPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AuthScaffold(
-      title: '找回密码',
-      subtitle: '输入绑定的邮箱或手机号获取验证码',
-      child: Column(
-        children: [
-          const TextField(decoration: InputDecoration(hintText: '邮箱 / 手机号')),
-          const SizedBox(height: 12),
-          const TextField(decoration: InputDecoration(hintText: '验证码')),
-          const SizedBox(height: 20),
-          SizedBox(
-              width: double.infinity,
-              child: FilledButton(onPressed: () {}, child: const Text('确认'))),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '找回密码',
+        subtitle: '输入绑定信息获取验证码',
+        child: Column(
+          children: [
+            const _AuthField(label: '邮箱或手机号', icon: Icons.person_outline),
+            const SizedBox(height: 14),
+            const _AuthField(label: '验证码', icon: Icons.verified_outlined),
+            const SizedBox(height: 24),
+            _PrimaryAuthButton(
+                label: '确认', onTap: () => Navigator.pop(context)),
+          ],
+        ),
+      );
+}
+
+class PhoneLoginPage extends StatelessWidget {
+  const PhoneLoginPage({super.key});
+  @override
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '手机号登录',
+        subtitle: '使用手机号和验证码登录',
+        child: Column(children: [
+          const _AuthField(label: '国家/地区 +86', icon: Icons.language),
+          const SizedBox(height: 14),
+          const _AuthField(label: '手机号码', icon: Icons.phone_outlined),
+          const SizedBox(height: 14),
+          const _AuthField(label: '验证码', icon: Icons.verified_outlined),
+          const SizedBox(height: 24),
+          _PrimaryAuthButton(
+              label: '登录',
+              onTap: () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const Friend3Shell()))),
+        ]),
+      );
+}
+
+class EmailRegisterPage extends StatelessWidget {
+  const EmailRegisterPage({super.key});
+  @override
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '邮箱注册',
+        subtitle: '使用邮箱创建 Friend3 账号',
+        child: Column(children: [
+          const _AuthField(label: '邮箱地址', icon: Icons.email_outlined),
+          const SizedBox(height: 14),
+          const _AuthField(label: '邮箱验证码', icon: Icons.verified_outlined),
+          const SizedBox(height: 24),
+          _PrimaryAuthButton(
+              label: '下一步',
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const PasswordSetupPage()))),
+        ]),
+      );
+}
+
+class PasswordSetupPage extends StatelessWidget {
+  const PasswordSetupPage({super.key});
+  @override
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '设置密码',
+        subtitle: '为你的 Friend3 账号设置安全密码',
+        child: Column(children: [
+          const _AuthField(
+              label: '设置密码', icon: Icons.lock_outline, obscureText: true),
+          const SizedBox(height: 14),
+          const _AuthField(
+              label: '确认密码',
+              icon: Icons.lock_reset_outlined,
+              obscureText: true),
+          const SizedBox(height: 24),
+          _PrimaryAuthButton(
+              label: '完成注册',
+              onTap: () => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const Friend3Shell()),
+                  (_) => false)),
+        ]),
+      );
 }
 
 class ProfileSetupPage extends StatelessWidget {
   const ProfileSetupPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AuthScaffold(
-      title: '完善资料',
-      subtitle: '让大家更快认识你',
-      child: Column(
-        children: [
-          const CircleAvatar(
-              radius: 42, child: Icon(Icons.add_a_photo_outlined)),
-          const SizedBox(height: 18),
-          const TextField(decoration: InputDecoration(hintText: '昵称')),
-          const SizedBox(height: 12),
-          const TextField(decoration: InputDecoration(hintText: '一句话介绍自己')),
-          const SizedBox(height: 12),
-          const TextField(decoration: InputDecoration(hintText: '选择兴趣标签')),
-          const SizedBox(height: 20),
-          SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                  onPressed: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const Friend3Shell()),
-                      (_) => false),
-                  child: const Text('完成'))),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AuthScaffold(
+        title: '完善资料',
+        subtitle: '让大家更快认识你',
+        child: Column(
+          children: [
+            const CircleAvatar(
+                radius: 46, child: Icon(Icons.add_a_photo_outlined, size: 30)),
+            const SizedBox(height: 20),
+            const _AuthField(label: '昵称', icon: Icons.badge_outlined),
+            const SizedBox(height: 14),
+            const _AuthField(label: '一句话介绍自己', icon: Icons.edit_outlined),
+            const SizedBox(height: 14),
+            const _AuthField(label: '选择兴趣标签', icon: Icons.local_offer_outlined),
+            const SizedBox(height: 24),
+            _PrimaryAuthButton(
+                label: '完成',
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const Friend3Shell()),
+                    (_) => false)),
+          ],
+        ),
+      );
 }
 
 class AuthScaffold extends StatelessWidget {
@@ -229,22 +293,47 @@ class AuthScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(),
       body: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 18, 24, 28),
-          children: [
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 8),
-            Text(subtitle,
-                style: TextStyle(color: Colors.white.withValues(alpha: .62))),
-            const SizedBox(height: 30),
-            child
-          ]),
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 30),
+        children: [
+          Text(title,
+              style:
+                  const TextStyle(fontSize: 32, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 8),
+          Text(subtitle,
+              style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 15)),
+          const SizedBox(height: 30),
+          child,
+        ],
+      ),
     );
   }
+}
+
+class _AuthField extends StatelessWidget {
+  const _AuthField(
+      {required this.label, required this.icon, this.obscureText = false});
+  final String label;
+  final IconData icon;
+  final bool obscureText;
+  @override
+  Widget build(BuildContext context) => TextField(
+      obscureText: obscureText,
+      decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)));
+}
+
+class _PrimaryAuthButton extends StatelessWidget {
+  const _PrimaryAuthButton({required this.label, required this.onTap});
+  final String label;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: FilledButton(onPressed: onTap, child: Text(label)));
 }
 
 class _SocialLogin extends StatelessWidget {

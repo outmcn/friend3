@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 import 'package:friend3/main.dart';
 
 void main() {
@@ -13,7 +14,7 @@ void main() {
     await tester.pumpWidget(const Friend3App());
     await tester.tap(find.text('开始使用'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('登录'));
+    await tester.tap(find.widgetWithText(FilledButton, '登录'));
     await tester.pumpAndSettle();
     expect(find.text('首页'), findsWidgets);
     expect(find.text('发现'), findsOneWidget);

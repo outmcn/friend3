@@ -1,44 +1,73 @@
 # Friend3 Figma 页面提取清单
 
-来源：`FriendAPP.fig`（Figma 文件名：06-社交媒体移动APP）
+来源：`FriendAPP.fig`，画布名称：`UI界面`。
 
-## 已提取
+## 已通过 Figma 二进制解析器识别的页面 Frame
 
-- 原始 Figma 压缩工程：`design/figma-source/`
-- Figma 元数据：`design/figma-source/meta.json`
-- Figma 画布数据：`design/figma-source/canvas.fig`
-- 缩略图：`design/figma-source/thumbnail.png`
-- 图片资源：`design/figma-source/images/`（3822 个，PNG 3715 个、JPEG 107 个）
-- 非 72×72 图片资源联系表：`design/figma-contact-1.jpg` 至 `design/figma-contact-4.jpg`
+Figma 文件头：`fig-kiwi`，版本 `95`。
 
-## 页面级提取状态
+所有主要页面均为 `375 × 812` 手机 Frame：
 
-| 页面 | Figma 原始 Frame 高清导出 | Flutter 页面 | 状态 |
-|---|---:|---:|---|
-| 引导页 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 登录页 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 注册页 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 信息收集 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 首页 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 发现 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 创建帖子 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 通知 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 我的 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 设置/账户切换 | 待从 canvas.fig 定位 | 已有静态页面 | 待 1:1 还原 |
-| 帖子详情/评论 | 待从 canvas.fig 定位 | 尚未完整建立 | 待实现 |
-| 直播观看/弹幕/礼物 | 待从 canvas.fig 定位 | 暂不做直播间 | 已排除 |
+### 认证流程
 
-## 资源统计
+- `07-注册`
+- `08-登录`
+- `09-登录-已填写`
+- `11-邮箱登录-验证码`
+- `13-手机号码登录`
+- `14-手机登录-国家选择`
+- `15-手机登录-已填写`
+- `16-手机登录-验证码`
+- `18-邮箱注册`
+- `19-邮箱注册-设置密码`
+- `20-手机注册`
+- `21-手机注册-输入`
 
-- Figma 包大小：约 38M
-- 解压后资源目录：约 41M
-- 可解码图片：3822
-- PNG：3715
-- JPEG：107
-- 72×72 小图：3699（大部分可能是头像/缩略图/组件资源）
-- 非 72×72 图片：123
+### 首页和发帖
 
-## 当前边界
+- `32-首页-默认`
+- `33-首页-扩展下滑`
+- `36-主页-添加帖子`
+- `31-发布帖子`
 
-本次只提取和整理 Figma 文件，不接真实后端，不改变 Friend3 业务功能。
-Figma `canvas.fig` 是二进制画布数据，当前环境没有直接读取 Figma 私有画布结构的解析器，因此尚未将每个 Frame 自动命名或导出成页面截图；不能把缩略图当作逐页 1:1 设计稿。
+### 发现和内容详情
+
+- `51-发现-流行趋势`
+- `53-发现-为你推荐`
+- `52-发现-点击视频`
+- `42-为你推荐-完整视频帖子`
+- `46-完整视频帖子-保存`
+- `47-完整视频帖子-分享`
+
+### 通知和账户
+
+- `60-通知-默认`
+- `79-设置-通知`
+- `72-个人资料-我的二维码`
+
+## 已提取文件
+
+- `design/figma-source/canvas.fig`
+- `design/figma-source/meta.json`
+- `design/figma-source/thumbnail.png`
+- `design/figma-source/images/`：3822 个资源
+- `design/figma-frames.json`：解析后的 Frame/Canvas 节点
+- `design/figma-page-frames.json`：主要页面和尺寸
+- `design/figma-page-text.json`：页面文本提取尝试
+- `design/figma-nodes.json`：节点摘要
+- `design/figma-contact-1.jpg` 至 `figma-contact-4.jpg`
+
+## 当前执行批次
+
+已将认证流程按照 Figma 的页面范围补齐为静态 UI：
+
+- 登录
+- 注册
+- 邮箱/手机登录入口
+- 验证码找回
+- 手机号登录
+- 邮箱注册
+- 密码设置
+- 资料完善
+
+当前保留静态演示数据，不接真实认证后端。
