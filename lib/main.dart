@@ -603,6 +603,8 @@ class Friend3HomePage extends StatelessWidget {
                   builder: (_) => const ContentDetailPage(
                     title: '首页推荐',
                     video: false,
+                    authorName: '推荐用户',
+                    authorAsset: 'assets/figma/profile-portrait-2.jpg',
                   ),
                 ),
               ),
@@ -903,11 +905,18 @@ class _EmptyStateCard extends StatelessWidget {
 }
 
 class ContentDetailPage extends StatelessWidget {
-  const ContentDetailPage(
-      {super.key, required this.title, required this.video});
+  const ContentDetailPage({
+    super.key,
+    required this.title,
+    required this.video,
+    this.authorName = '推荐用户',
+    this.authorAsset = 'assets/figma/profile-portrait-2.jpg',
+  });
 
   final String title;
   final bool video;
+  final String authorName;
+  final String authorAsset;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -941,16 +950,23 @@ class ContentDetailPage extends StatelessWidget {
                       color: Colors.white)),
             ),
             const SizedBox(height: 18),
-            const ListTile(
+            ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                backgroundImage:
-                    AssetImage('assets/figma/profile-portrait-2.jpg'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => OtherProfilePage(
+                    name: authorName,
+                    avatarAsset: authorAsset,
+                  ),
+                ),
               ),
-              title:
-                  Text('推荐用户', style: TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text('刚刚发布'),
-              trailing: OutlinedButton(onPressed: null, child: Text('关注')),
+              leading: CircleAvatar(backgroundImage: AssetImage(authorAsset)),
+              title: Text(authorName,
+                  style: const TextStyle(fontWeight: FontWeight.w700)),
+              subtitle: const Text('刚刚发布'),
+              trailing:
+                  const OutlinedButton(onPressed: null, child: Text('关注')),
             ),
             const SizedBox(height: 12),
             const Text('分享生活中的有趣瞬间，发现更多真实内容。',
@@ -1004,6 +1020,103 @@ class _CommentPreview extends StatelessWidget {
         leading: CircleAvatar(child: Icon(Icons.person)),
         title: Text('用户评论'),
         subtitle: Text('这条内容很有意思，期待更多分享。'),
+      );
+}
+
+class OtherProfilePage extends StatelessWidget {
+  const OtherProfilePage(
+      {super.key,
+      this.name = '推荐用户',
+      this.avatarAsset = 'assets/figma/profile-portrait-2.jpg'});
+  final String name;
+  final String avatarAsset;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Ta的主页'),
+          actions: [
+            IconButton(
+              onPressed: () => _showProfileMenu(context),
+              icon: const _FigmaIcon('more'),
+            ),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(18),
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                    radius: 42, backgroundImage: AssetImage(avatarAsset)),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name,
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 6),
+                      const Text('分享生活，认识更多有趣的人。'),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: FilledButton(
+                                  onPressed: () {}, child: const Text('关注'))),
+                          const SizedBox(width: 8),
+                          Expanded(
+                              child: OutlinedButton(
+                                  onPressed: () {}, child: const Text('私聊'))),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _Stat(value: '12', label: '帖子'),
+                _Stat(value: '128', label: '关注'),
+                _Stat(value: '2.4K', label: '粉丝'),
+              ],
+            ),
+            const SizedBox(height: 24),
+            const _SectionTitle(title: 'Ta的帖子', action: '全部'),
+            _FeaturePostCard(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) =>
+                        const ContentDetailPage(title: 'Ta的帖子', video: false)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            const _ContentPreviewCard(
+              title: '生活记录',
+              subtitle: '刚刚发布',
+              icon: Icons.photo_outlined,
+            ),
+          ],
+        ),
+      );
+
+  void _showProfileMenu(BuildContext context) => showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        builder: (_) => const SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(leading: _FigmaIcon('link'), title: Text('分享主页')),
+              ListTile(leading: _FigmaIcon('more'), title: Text('举报用户')),
+            ],
+          ),
+        ),
       );
 }
 
@@ -1320,11 +1433,17 @@ class RecommendationFeedPage extends StatelessWidget {
           padding: const EdgeInsets.all(18),
           children: [
             const _ContentPreviewCard(
-                title: '推荐内容 01', subtitle: '静态推荐内容', icon: Icons.auto_awesome),
+              title: '推荐内容 01',
+              subtitle: '静态推荐内容',
+              icon: Icons.auto_awesome,
+              imageAsset: 'assets/figma/post-thumbnail-4.jpg',
+            ),
             const _ContentPreviewCard(
-                title: '推荐内容 02',
-                subtitle: '更多生活方式分享',
-                icon: Icons.photo_outlined),
+              title: '推荐内容 02',
+              subtitle: '更多生活方式分享',
+              icon: Icons.photo_outlined,
+              imageAsset: 'assets/figma/post-thumbnail-5.jpg',
+            ),
             _ContentPreviewCard(
               title: '完整视频帖子',
               subtitle: '点击查看详情',
@@ -1366,19 +1485,23 @@ class _ContentPreviewCard extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     this.onTap,
+    this.imageAsset,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final VoidCallback? onTap;
+  final String? imageAsset;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
         onTap: onTap,
-        leading: CircleAvatar(child: Icon(icon)),
+        leading: imageAsset == null
+            ? _iconFor(icon)
+            : CircleAvatar(backgroundImage: AssetImage(imageAsset!)),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
@@ -1397,16 +1520,32 @@ class _CreatorChip extends StatelessWidget {
     'assets/figma/profile-portrait-4.jpg',
     'assets/figma/profile-portrait-5.jpg',
   ];
+
   @override
-  Widget build(BuildContext context) => SizedBox(
-      width: 76,
-      child: Column(children: [
-        CircleAvatar(
-            radius: 31,
-            backgroundImage: AssetImage(_images[index % _images.length])),
-        const SizedBox(height: 7),
-        Text('用户${index + 1}', overflow: TextOverflow.ellipsis)
-      ]));
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => OtherProfilePage(
+              name: '创作者 ${index + 1}',
+              avatarAsset: _images[index % _images.length],
+            ),
+          ),
+        ),
+        child: SizedBox(
+          width: 76,
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 31,
+                backgroundImage: AssetImage(_images[index % _images.length]),
+              ),
+              const SizedBox(height: 7),
+              Text('用户${index + 1}', overflow: TextOverflow.ellipsis),
+            ],
+          ),
+        ),
+      );
 }
 
 class _FeaturePostCard extends StatelessWidget {
